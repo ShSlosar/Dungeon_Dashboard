@@ -66,3 +66,17 @@ class Character:
         query  = "DELETE FROM characters WHERE id = %(id)s;"
         return connectToMySQL(database).query_db(query, data)
     
+    @classmethod
+    def update(cls,data):
+        query= """
+        UPDATE characters SET
+        name=%(name)s, lvl=%(lvl)s, 
+        race=%(race)s, class_type=%(class_type)s, 
+        alignment=%(alignment)s, 
+        hp=%(hp)s, ac=%(ac)s, speed=%(speed)s, 
+        str=%(str)s, dex=%(dex)s,
+        intel=%(intel)s, wis=%(wis)s, 
+        const=%(const)s, chars=%(chars)s
+        WHERE id = %(id)s
+        """
+        return connectToMySQL(database).query_db(query, data)

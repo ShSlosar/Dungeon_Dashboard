@@ -5,7 +5,8 @@ var monsters = document.getElementById('monster-result-card');
 var monster = document.getElementById('monster-sidebar');
 var actions = document.getElementById('actions');
 var playerCardDiv = document.getElementById('participant-list');
-var centerCard = document.getElementById('chapters-card')
+var centerCard = document.getElementById('chapters-card');
+var clockCard = document.getElementById('clock-card')
 //----------------------------------------------------------------
 
 // Skill-to-Modifier Function_____________________________________________________
@@ -211,12 +212,12 @@ function displayPlayerEditForm(e,element){
     <div class="d-flex justify-content-between">
         <form onsubmit="updatePlayer(event)" class="mx-auto" id="edit-player-form">
             <div class="d-flex justify-content-evenly p-2">
-                <input class="" type="text" name="name" placeholder="${data.name}">
-                <input class="" type="text" name="race" placeholder="${data.race}">
+                <input class="" type="text" name="name" value="${data.name}">
+                <input class="" type="text" name="race" value="${data.race}">
             </div>
             <div class="d-flex justify-content-evenly p-2">
-                <input class="" type="text" name="alignment" placeholder="${data.alignment}">
-                <input class="" type="text" name="class_type" placeholder="${data.class_type}">
+                <input class="" type="text" name="alignment" value="${data.alignment}">
+                <input class="" type="text" name="class_type" value="${data.class_type}">
             </div>
             <table class="table text-center">
                 <thead>
@@ -226,10 +227,10 @@ function displayPlayerEditForm(e,element){
                     <th>LVL</th>
                 </thead>
                 <tbody>
-                    <td><input class="w-50" min="1" max="30" type="number" name="ac" placeholder="${data.ac}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="hp" placeholder="${data.hp}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="speed" placeholder="${data.speed}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="lvl" placeholder="${data.lvl}"></td>
+                    <td><input class="w-50" min="1" max="30" type="number" name="ac" value="${data.ac}"></td>
+                    <td><input class="w-50" min="1" max="30" type="number" name="hp" value="${data.hp}"></td>
+                    <td><input class="w-50" min="1" max="30" type="number" name="speed" value="${data.speed}"></td>
+                    <td><input class="w-50" min="1" max="30" type="number" name="lvl"value="${data.lvl}"></td>
                 </tbody>
             </table>
             <table class="table text-center">
@@ -242,12 +243,12 @@ function displayPlayerEditForm(e,element){
                     <th>const</th>
                 </thead>
                 <tbody>
-                    <td><input class="w-50" min="1" max="30" type="number" name="str" placeholder="${data.str}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="dex" placeholder="${data.dex}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="intel" placeholder="${data.intel}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="wis" placeholder="${data.wis}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="chars" placeholder="${data.chars}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="const" placeholder="${data.const}"></td>
+                    <td><input class="w-50" min="1" max="30" type="number" name="str" value="${data.str}"></td>
+                    <td><input class="w-50" min="1" max="30" type="number" name="dex" value="${data.dex}"></td>
+                    <td><input class="w-50" min="1" max="30" type="number" name="intel" value="${data.intel}"></td>
+                    <td><input class="w-50" min="1" max="30" type="number" name="wis" value="${data.wis}"></td>
+                    <td><input class="w-50" min="1" max="30" type="number" name="chars" value="${data.chars}"></td>
+                    <td><input class="w-50" min="1" max="30" type="number" name="const" value="${data.const}"></td>
                 </tbody>
             </table>
             <div class="d-flex justify-content-evenly p-3">
@@ -258,7 +259,7 @@ function displayPlayerEditForm(e,element){
                 <input class="sub-btn" type="submit" value="Submit">
                 <form id="" onsubmit="displayPlayerEditForm(event,this)" class="">
                     <input type="hidden" name="player_id" value="${data.id}">
-                    <input class="sub-btn " value="Edit" type="Reset">
+                    <input class="sub-btn" value="Edit" type="submit">
                 </form>
             </div>
         </form>
@@ -285,7 +286,7 @@ function defaultCenterCard(element){
 //Display players in game_____________________________________________________________________________________________
 
 function displayPlayers(e){
-    playerCardDiv.innerHTML = `<p><strong>There are ${game_items.players.length} players in this game</strong></p>`
+    playerCardDiv.innerHTML = `<p class="border-bottom border-2 border-dark"><strong>There are ${game_items.players.length} players in this game</strong></p>`
     for(var i=0; i<game_items.players.length; i++){
         console.log(game_items.players[i].name);
         playerCardDiv.innerHTML += 
@@ -380,7 +381,7 @@ function removePlayerFromItems(e,element){
     e.preventDefault();
     console.log(element.player_id.value);
     console.log(game_items.players.length);
-    for(i=0; i<element.player_id.value; i++){
+    for(i=0; i<game_items.players.length; i++){
         // console.log(game_items.players[i].id);
         if(element.player_id.value == game_items.players[i].id){
             game_items.players.splice(i,1);
@@ -391,6 +392,21 @@ function removePlayerFromItems(e,element){
     displayPlayers(e);
 }
 //---------------------------------------------------------------------------------------------------------------
+
+function updatePlayerInItems(e,data){
+    e.preventDefault();
+    console.log(data.id);
+    for(i=0; i<game_items.length; i++){
+        // console.log(game_items.players[i].id);
+        if(data.id == game_items.players[i].id){
+            game_items.players[i] = data;
+            console.log(game_items.players[i]);
+        }
+    }
+    console.log(game_items.players);
+    displayPlayers(e);
+    defaultCenterCard(e);
+}
 
 //Display monsters in game_______________________________________________________________________ 
 
@@ -457,7 +473,65 @@ function displayMonsters(e){
     }
     actions.innerHTML = '<p class="border-bottom border-2 border-dark"></p>'
 }
-//_------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+
+// Clock Form__________________________________________________________________________________
+function changeClock(e){
+    e.preventDefault();
+    var time = game_items.game_data.time_active;
+    console.log(time);
+    var seconds = time.slice(6,9);
+    var minutes = time.slice(3,5);
+    var hours = time.slice(0,2);
+    var amPm = time.slice(9)
+    var secInt = parseInt(seconds);
+    var minInt = parseInt(minutes);
+    var hrsInt = parseInt(hours);
+    var dysInt = parseInt(game_items.game_data.day)// LEFT OFF HERE =>NEED to submit time form, convert back to a string, and save to DB
+    clockCard.innerHTML = `
+        <form class="d-flex justify-content-evenly" onsubmit="saveClock(event)">
+            <table class="table-sm text-center col-6 border-right border-2 border-dark h">
+                <thead>
+                    <th>Day</th>
+                    <th>Hrs</th>
+                    <th>Min</th>
+                    <th>Sec</th>
+                    <th>A/PM</th>
+                </thead>
+                <tbody>       
+                    <td><input class=" clock-input w-75" name="day" type="number" value="${dysInt}"></td>
+                    <td><input class=" clock-input w-75" name="hour" type="number" min="1" max="12" value="${hrsInt}" ></td>
+                    <td><input class=" clock-input w-75" name="minute" type="number" min="1" max="59" value="${minInt}"></td>
+                    <td><input class=" clock-input w-75" name="second" type="number" min="1" max="59" value="${secInt}"></td>
+                    <td>
+                        <select class="" name="amPm" id="">
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
+                    </td>
+                </tbody>
+            </table>
+            <div class="d-flex mt-4 mb-4">
+                <input class="mx-1 sub-btn" type="submit" value="Save" onclick="changeclock(event)">
+                <input class="mx-1 sub-btn" type="button" value="Back" onclick="defaultClockCard(event)">
+            </div>
+        </form>
+    `
+}
+//-----------------------------------------------------------------------------------------
+function defaultClockCard(e){
+    e.preventDefault();
+    clockCard.innerHTML = `
+    <div>
+        <h5><strong>Day:</strong> ${game_items.game_data.day} </h5>
+        <h5 ><strong>Active Time:</strong> <span id="timer">${game_items.game_data.time_active}</span> </h5>
+    </div>
+    <div class="d-flex flex-column justify-content-around">
+        <h5><strong>Adjust in-game time:</strong></h5>
+        <input type="submit" value="Change" onclick="changeClock(event)">
+    </div>
+    `
+}
 
 //           /||||||||||||||||||--AJAX--|||||||||||||||||||\----------------------------------------
 
@@ -476,25 +550,17 @@ function runGame(e){
             console.log(game_items.monsters[0])
             var time = data.game_data.time_active;
             var days = data.game_data.day;
-            clockIniCards.innerHTML =
-            `<div class="game-card col-4 m-3 d-flex justify-content-evenly p-3">
-            <div>
-                <h5><strong>Day:</strong> ${days} </h5>
-            <h5 ><strong>Active Time:</strong> <span id="timer">${time}</span> </h5>
-            </div>
-            <div>
-                <p class="text-center"><strong>clock buttons</strong></p>
-                <div class="d-flex justify-content-around">
-                    <button class="mx-1 btn-secondary btn-md">stop</button>
-                    <button class="mx-1 btn-secondary btn-md">start</button>
-                    <button class="mx-1 btn-secondary btn-md">forward</button>
-                    <button class="mx-1 btn-secondary btn-md">backward</button>
+            clockCard.innerHTML =
+                `
+                <div>
+                    <h5><strong>Day:</strong> ${days} </h5>
+                    <h5 ><strong>Active Time:</strong> <span id="timer">${time}</span> </h5>
                 </div>
-            </div>
-        </div>
-        <div class="game-card col-7 m-3 " >
-            <p>Initiative</p>
-        </div>`
+                <div class="d-flex flex-column justify-content-around">
+                    <h5><strong>Adjust in-game time:</strong></h5>
+                    <input type="submit" value="Change" onclick="changeClock(event)">
+                </div>
+            `
         // PLAYER LIST:
         function list_chars(){ 
             playerCardDiv.innerHTML = `<p class="border-bottom border-2 border-dark"><strong>There are ${data.players.length} players in this game</strong></p>`
@@ -884,6 +950,7 @@ function updatePlayer(e){
     .then(res => res.json())
     .then(data =>{
         console.log(data);
+        updatePlayerInItems(e,data);
         
     })
 }

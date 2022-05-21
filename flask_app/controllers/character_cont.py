@@ -114,9 +114,33 @@ def update_character():
         "intel" : request.form['intel'],
         "wis" : request.form['wis'],
         "const" : request.form['const'],
-        "chars" : request.form['chars'],
-        "creator_id" : request.form['creator_id'],
-        "dm_id" : request.form['dm_id'],
-        "game_id" : request.form['game_id']
+        "chars" : request.form['chars']
     }
-    print(player_data)
+    Character.update(player_data)
+    updated = Character.get_by_id({'id':player_data['id']})
+    print(updated)
+    
+    updated_player = {
+        "id" : updated.id,
+        "lvl" : updated.lvl,
+        "name" : updated.name,
+        "race" : updated.race,
+        "class_type" : updated.class_type,
+        "alignment" : updated.alignment,
+        "hp" : updated.hp,
+        "ac" : updated.ac,
+        "speed" : updated.speed,
+        "str" : updated.str,
+        "dex" : updated.dex,
+        "intel" : updated.intel,
+        "wis" : updated.wis,
+        "const" : updated.const,
+        "chars" : updated.chars,
+        "dm_id" : updated.dm_id,
+        "creator_id" : updated.creator_id,
+        "game_id" : updated.game_id,
+        "created_at" : updated.created_at,
+        "updated_at" : updated.updated_at
+    }
+    
+    return (updated_player) 

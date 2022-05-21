@@ -14,12 +14,7 @@
 </head>
 <body>
     <header id="game-header" class="d-flex align-items-center justify-content-evenly p-2 border rounded border-3 border-dark ">
-        <!-- <img src="{{ url_for('static', filename='Assets/dunDashLogo.png') }}" alt="Logo"> -->
-            <div>
-                <h4>Last saved Day: {{game.gclock.day}}</h4>
-                <h4> Last saved time: {{time}} </h4>
-            </div>
-        
+        <img src="{{ url_for('static', filename='Assets/dunDashLogo.png') }}" alt="Logo">
         <h1 class="text-center">Welcome {{game.name}}</h1>
         <div class="d-flex align-items-center">
             <i style="color:rgb(255, 255, 255)" class="fa-2xl fa-solid fa-gear px-2"></i>
@@ -31,19 +26,14 @@
         </div>
     </header>
     <div id="top-container" class=" d-flex justify-content-between p3">
-        <div class="game-card col-4 m-3 d-flex justify-content-evenly p-3">
+        <div id="clock-card" class="game-card col-4 m-3 d-flex justify-content-evenly p-3">
             <div>
-                <h5><strong>Day:</strong> {{game.gclock.day}} </h5>
-            <h5><strong>Avtive Time:</strong> {{time}}</h5>
+                <h5><strong>Day:</strong><input type="number" value="0" ></h5>
+                <h5><strong>Avtive Time:</strong><input type="number" value="04">:<input type="number" value="00">:<input type="number" value="00"></h5>
             </div>
-            <div>
-                <p class="text-center"><strong>clock buttons</strong></p>
-                <div class="d-flex justify-content-around">
-                    <button class="mx-1 btn-secondary btn-md">stop</button>
-                    <button onclick="timer(this)" class="mx-1 btn-secondary btn-md">start</button>
-                    <button class="mx-1 btn-secondary btn-md">forward</button>
-                    <button class="mx-1 btn-secondary btn-md">backward</button>
-                </div>
+            <div class="d-flex flex-column justify-content-around">
+                <h5><strong>Adjust in-game time:</strong></h5>
+                <input type="submit" value="Change" onclick="changeclock(event)">
             </div>
         </div>
         <div class="game-card col-7 m-3 " >
