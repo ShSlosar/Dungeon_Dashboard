@@ -28,7 +28,7 @@ def load_game(game_id):
         "time": t
     }
     time24 = datetime.strptime(str(t) , "%H:%M:%S")
-    time12 = time24.strftime("%#I:%M:%#S %p")
+    time12 = time24.strftime("%I:%#M:%S %p")
     # new_time = str(time12) + timedelta(seconds=1)
     # def set_interval(func, sec):
     #     def printsomthing():
@@ -89,6 +89,7 @@ def run_game():
     current_user = User.get_by_id({'id' : session['user_id']})
     time24 = datetime.strptime(str(current_game.gclock.time_active) , "%H:%M:%S")
     time12 = time24.strftime("%I:%M:%S %p")
+    timeVal = time24.strftime("%H:%M:%S")
         
     print(time24)
     data = {
@@ -97,6 +98,12 @@ def run_game():
                 'time_active' : time12,
                 'day' : current_game.gclock.day,
                 'id' : current_game.id
+        },
+        'clock_data' :{
+            'clock_id' : current_game.gclock.id,
+            'time_active24': timeVal,
+            'time_active' : time12,
+            'day' : current_game.gclock.day
         },
         'dm_data' : {
             'id' : current_user.id,

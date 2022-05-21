@@ -30,12 +30,14 @@ input[type=submit],
 input[type=btn],
 input[type=button],
 input[type=text],
+input[type=time],
 select{
     color:  rgb(255, 255, 255) ;
     background-color: rgba(85, 79, 26, 0.51);
 }
 input[type=number]::placeholder,
-input[type=text]::placeholder{
+input[type=text]::placeholder,
+input[type=time]::placeholder{
     color:  rgba(255, 255, 255, 0.401) ;
     background-color: rgba(85, 79, 26, 0.51);
 }
@@ -91,4 +93,12 @@ input[type="number"]::-webkit-inner-spin-button {
 .zero-modif{
     font-weight: bold;
     cursor: pointer;
+}
+.clock-input{
+    height: 28%;
+    width: 25%;
+}
+#clock-card{
+    max-height: 100px;
+    min-height: 100px;
 }

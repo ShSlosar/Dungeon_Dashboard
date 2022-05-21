@@ -41,3 +41,22 @@ class Clock:
         ( day, game_id,  dm_id, time_active ) 
         VALUES ( %(day)s, %(game_id)s, %(dm_id)s, %(time_active)s);"""
         return connectToMySQL(database).query_db(query,data)
+    
+    @classmethod
+    def update(cls,data):
+        query = """
+        UPDATE clocks SET
+        day=%(day)s,time_active=%(time_active)s
+        WHERE id=%(id)s
+        """
+        return connectToMySQL(database).query_db(query,data)
+    
+    @classmethod
+    def get_by_id(cls,data):
+        query = """
+        SELECT * FROM clocks
+        WHERE id=%(id)s
+        """
+        result = connectToMySQL(database).query_db(query,data)
+        new_clock = cls(result[0])
+        return new_clock

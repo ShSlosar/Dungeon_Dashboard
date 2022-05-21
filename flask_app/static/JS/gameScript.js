@@ -396,7 +396,7 @@ function removePlayerFromItems(e,element){
 function updatePlayerInItems(e,data){
     e.preventDefault();
     console.log(data.id);
-    for(i=0; i<game_items.length; i++){
+    for(i=0; i<game_items.players.length; i++){
         // console.log(game_items.players[i].id);
         if(data.id == game_items.players[i].id){
             game_items.players[i] = data;
@@ -478,41 +478,16 @@ function displayMonsters(e){
 // Clock Form__________________________________________________________________________________
 function changeClock(e){
     e.preventDefault();
-    var time = game_items.game_data.time_active;
-    console.log(time);
-    var seconds = time.slice(6,9);
-    var minutes = time.slice(3,5);
-    var hours = time.slice(0,2);
-    var amPm = time.slice(9)
-    var secInt = parseInt(seconds);
-    var minInt = parseInt(minutes);
-    var hrsInt = parseInt(hours);
-    var dysInt = parseInt(game_items.game_data.day)// LEFT OFF HERE =>NEED to submit time form, convert back to a string, and save to DB
+    var dysInt = parseInt(game_items.game_data.day)
     clockCard.innerHTML = `
-        <form class="d-flex justify-content-evenly" onsubmit="saveClock(event)">
-            <table class="table-sm text-center col-6 border-right border-2 border-dark h">
-                <thead>
-                    <th>Day</th>
-                    <th>Hrs</th>
-                    <th>Min</th>
-                    <th>Sec</th>
-                    <th>A/PM</th>
-                </thead>
-                <tbody>       
-                    <td><input class=" clock-input w-75" name="day" type="number" value="${dysInt}"></td>
-                    <td><input class=" clock-input w-75" name="hour" type="number" min="1" max="12" value="${hrsInt}" ></td>
-                    <td><input class=" clock-input w-75" name="minute" type="number" min="1" max="59" value="${minInt}"></td>
-                    <td><input class=" clock-input w-75" name="second" type="number" min="1" max="59" value="${secInt}"></td>
-                    <td>
-                        <select class="" name="amPm" id="">
-                            <option value="AM">AM</option>
-                            <option value="PM">PM</option>
-                        </select>
-                    </td>
-                </tbody>
-            </table>
-            <div class="d-flex mt-4 mb-4">
-                <input class="mx-1 sub-btn" type="submit" value="Save" onclick="changeclock(event)">
+        <form id="save-clock-form" class="d-flex justify-content-between align-items-center p-2" onsubmit="saveClock(event, this)">
+            <div class="col-7 d-flex justify-content-around"> 
+                <input class=" clock-input mx-2" name="day" type="number" value="${dysInt}">
+                <input class=" mx-2" name="time_active" type="time" min="1" max="12" placeholder="" value="${game_items.clock_data.time_active24}" >
+            </div>
+            <div class="col-4 d-flex">
+                <input type="hidden" name="id" value="${game_items.clock_data.clock_id}">
+                <input class="mx-1 sub-btn" type="submit" value="Save">
                 <input class="mx-1 sub-btn" type="button" value="Back" onclick="defaultClockCard(event)">
             </div>
         </form>
@@ -521,13 +496,14 @@ function changeClock(e){
 //-----------------------------------------------------------------------------------------
 function defaultClockCard(e){
     e.preventDefault();
+    console.log(game_items['clock_data']);
     clockCard.innerHTML = `
     <div>
-        <h5><strong>Day:</strong> ${game_items.game_data.day} </h5>
-        <h5 ><strong>Active Time:</strong> <span id="timer">${game_items.game_data.time_active}</span> </h5>
+        <h5><strong>Day:</strong> ${game_items.clock_data.day} </h5>
+        <h5><strong>Time:</strong> <span id="timer">${game_items.clock_data.time_active}</span> </h5>
     </div>
     <div class="d-flex flex-column justify-content-around">
-        <h5><strong>Adjust in-game time:</strong></h5>
+        
         <input type="submit" value="Change" onclick="changeClock(event)">
     </div>
     `
@@ -537,7 +513,6 @@ function defaultClockCard(e){
 
 //AJAX: Display Game Data when first loading game=>
 function runGame(e){
-    var clockIniCards = document.getElementById('top-container');
     console.log('Starting game...');
     //e.preventDefault();
     fetch('http://127.0.0.1:5000/game/run')
@@ -548,16 +523,15 @@ function runGame(e){
             // CLOCK:
             globalThis.game_items = data;
             console.log(game_items.monsters[0])
-            var time = data.game_data.time_active;
-            var days = data.game_data.day;
+            var time = data.clock_data.time_active;
+            var days = data.clock_data.day;
             clockCard.innerHTML =
                 `
                 <div>
                     <h5><strong>Day:</strong> ${days} </h5>
-                    <h5 ><strong>Active Time:</strong> <span id="timer">${time}</span> </h5>
+                    <h5 ><strong>Time:</strong> <span id="timer">${time}</span> </h5>
                 </div>
                 <div class="d-flex flex-column justify-content-around">
-                    <h5><strong>Adjust in-game time:</strong></h5>
                     <input type="submit" value="Change" onclick="changeClock(event)">
                 </div>
             `
@@ -693,6 +667,23 @@ function runGame(e){
     })
 }
 //================================================================================================
+
+//AJAX: Save Clock =>
+function saveClock(e,element){
+    e.preventDefault();
+    var clockForm =document.getElementById(`save-clock-form`)
+    var form = new FormData(clockForm);
+    console.log('Clicked: saveClock()', form);
+    fetch('http://127.0.0.1:5000/update/clock', {method:'Post', body: form})
+    .then(res => res.json())
+    .then(data =>{
+        console.log(data);
+        game_items.clock_data.time_active = data.time_active;
+        game_items.clock_data.day = data.day;
+        console.log(game_items.clock_data)
+        defaultClockCard(e);
+    })
+}
 
 //AJAX: Add Monster to game =>
 function addMonster(e){
