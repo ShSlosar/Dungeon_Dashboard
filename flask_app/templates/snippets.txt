@@ -1,0 +1,52 @@
+<form class=" border border-3 border-dark col-4 bg-secondary text-warning  mx-3 p-4" action="/login" method="POST">
+    <h1 class="text-center" >Login</h1>
+    {% with login = get_flashed_messages(category_filter=["login"]) %}     <!-- declare a variable called messages -->
+    {% if login %}                            <!-- check if there are any messages -->
+        {% for message in login %}            <!-- loop through the messages -->
+            <p class="text-light text-center fst-italic">{{message}}</p>                   <!-- display each message in a paragraph tag -->
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div class="form-group my-2">
+        <label for="email">Email:</label>
+        <input class="border border-2 border-dark form-control" type="text" name="email">
+    </div>
+    <div class="form-group my-2">
+        <label for="Password">Password:</label>
+        <input class="border border-2 border-dark form-control" type="password" name="password">
+    </div>
+    <input class="mx-auto my-2 btn btn-primary text-center border-2 border-dark" type="submit" value="Login">
+</form>
+
+
+<form class="mt-5 border border-3 border-dark col-4 bg-secondary text-warning p-4" action="/create_user" method="POST">
+    <h1 class="text-center" >Register</h1>
+    {% with regi = get_flashed_messages(category_filter=["regi"]) %}     
+    {% if regi %}                            
+        {% for message in regi %}          
+            <p class="text-light text-center fst-italic">{{message}}</p>                   
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div class="form-group my-2">
+        <label for="first_name">First Name:</label>
+        <input class="border border-2 border-dark form-control" type="text" name="first_name">
+    </div>
+    <div class="form-group my-2">
+        <label for="last_name">Last Name:</label>
+        <input class="border border-2 border-dark form-control" type="text" name="last_name">
+    </div>
+    <div class="form-grou my-2">
+        <label for="email" >Email:</label>
+        <input class="border border-2 border-dark form-control" type="text" name="email">
+    </div>
+    <div class="form-group my-2">
+        <label for="password" >Password:</label>
+        <input class="border border-2 border-dark form-control" type="password" name="password">
+    </div>
+    <div class="form-group my-2">
+        <label for="email" >Confirm Password:</label>
+        <input class="border border-2 border-dark form-control" type="password" name="con_pass">
+    </div>
+    <input class="mx-auto my-2 btn btn-primary text-center border-2 border-dark" type="submit" value="Register">
+</form>
