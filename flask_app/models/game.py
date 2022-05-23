@@ -2,7 +2,7 @@ from flask_app.config.mysqlconnection import connectToMySQL
 from flask_app import app
 from flask import render_template,redirect,request,session,flash
 from flask_bcrypt import Bcrypt
-from flask_app.models import user, clock, character, monster
+from flask_app.models import user, clock, character, monster,note
 import re
 import pprint
 database = "dun_dashdb"
@@ -18,6 +18,7 @@ class Game:
         self.gclock = None
         self.monsters = []
         self.players = []
+        self.notes= []
     
     
     @staticmethod
@@ -59,8 +60,14 @@ class Game:
         JOIN npcs ON npcs.game_id = games.id
         WHERE games.id = %(id)s
         """
+        query3 = """
+        SELECT * FROM games
+        JOIN notes ON notes.game_id = games.id
+        WHERE games.id = %(id)s
+        """
         result = connectToMySQL(database).query_db(query, data)
         result2 = connectToMySQL(database).query_db(query2, data)
+        result3 = connectToMySQL(database).query_db(query3, data)
         one_game = cls(result[0])
         for row in result:
             character_data = {
@@ -97,6 +104,18 @@ class Game:
             }
             one_game.monsters.append(monster.Monster(monster_data))
             
+        for row in result3:
+            note_data = {
+            "id" : row['notes.id'],
+            "title" : row['title'],
+            "content" : row['content'],
+            "dm_id" : row['notes.dm_id'],
+            "game_id" : row['game_id'],
+            "created_at" : row['notes.created_at'],
+            "updated_at" : row['notes.updated_at']
+            }
+            one_game.notes.append(note.Note(note_data))
+        
         clock_data = {
             "id" : result[0]["clocks.id"],
             "day" : result[0]["day"],

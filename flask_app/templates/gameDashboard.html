@@ -56,13 +56,23 @@
             <div id="actions">
             </div>
         </div>
-        <div id="chapters-card" class="game-card-main col-5 p-3 overflow-auto">
-            <h1 class="text-center">Text Box</h1>
-            <div class="d-flex justify-content-between">
-                <div  class="h-25 p-3 text-center">
-                    <textarea class="" name="Chapters" id="" cols="80" rows="20"></textarea>
-                    <input class="text-button h-25 p-2" type="submit" value="My Chapters">
-                    <input class="text-button h-25 p-2" type="submit" value="Save Work">
+        <div id="notes-card" class="game-card-main col-5 p-3 overflow-auto">
+            <h2 class="text-center">notes</h2>
+            <div class="d-flex justify-content-evenly ">
+                <form id="note-form" class="d-flex flex-column  border border-2 overflow-auto border-dark rounded p-2">
+                    <input type="text" placeholder="Title">
+                    <textarea name="note" id="" cols="30" rows="10"></textarea>
+                    <input type="submit" value="save note">
+                </form>
+                <div class="notes-table border border-2 overflow-auto border-dark rounded p-2 w-50">
+                    <table class="table text-center ">
+                        <thead>
+                            <th>title</th>
+                            <th>options</th>
+                        </thead>
+                        <tbody id="note-table-body">
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

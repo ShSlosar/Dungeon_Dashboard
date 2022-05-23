@@ -5,8 +5,9 @@ var monsters = document.getElementById('monster-result-card');
 var monster = document.getElementById('monster-sidebar');
 var actions = document.getElementById('actions');
 var playerCardDiv = document.getElementById('participant-list');
-var centerCard = document.getElementById('chapters-card');
-var clockCard = document.getElementById('clock-card')
+var centerCard = document.getElementById('notes-card');
+var clockCard = document.getElementById('clock-card');
+var noteTable = document.getElementById('note-table-body')
 //----------------------------------------------------------------
 
 // Skill-to-Modifier Function_____________________________________________________
@@ -266,20 +267,50 @@ function displayPlayerEditForm(e,element){
     </div>
     `
 }
+function list_notes_again(){
+    for(var i=0; i<game_items.notes.length; i++){
+        noteTable.innerHTML += `
+            <td>${game_items.notes[i].title}</td>
+            <td class="d-flex align-items-center justify-content-evenly">
+                <a value="${game_items.notes[i].id}" class="text-light" href="#">View</a> | 
+                <a value="${game_items.notes[i].id}" class="text-light" href="#">Delete</a>
+            </td>
+        `
+    }
+}
 
 //Revert Center Card to Default View_____________________________________________________________
 
 function defaultCenterCard(element){
-    centerCard.innerHTML = `
-    <h1 class="text-center">Text Box</h1>
-    <div class="d-flex justify-content-between">
-        <div  class="h-25 p-3 text-center">
-            <textarea class="" name="Chapters" id="" cols="80" rows="20"></textarea>
-            <input class="text-button h-25 p-2" type="submit" value="My Chapters">
-            <input class="text-button h-25 p-2" type="submit" value="Save Work">
-        </div>
-    </div>
-    `
+    html = `
+        <h2 class="text-center">notes</h2>
+        <div class="d-flex justify-content-evenly ">
+            <form id="note-form" class="d-flex flex-column  border border-2 overflow-auto border-dark rounded p-2">
+                <input type="text" placeholder="Title">
+                <textarea name="note" id="" cols="30" rows="10"></textarea>
+                <input type="submit" value="save note">
+            </form>
+            <div id="note-table" class="notes-table border border-2 overflow-auto border-dark rounded p-2 w-50">
+                <table class="table text-center ">
+                    <thead>
+                        <th>title</th>
+                        <th>options</th>
+                    </thead>
+                    <tbody id="note-table-body">`
+                    for(var i=0; i<game_items.notes.length; i++){
+                        html +=
+                        `<td>${game_items.notes[i].title}</td>
+                        <td>
+                            <a value="${game_items.notes[i].id}" class="text-light" href="#">View</a> | 
+                            <a value="${game_items.notes[i].id}" class="text-light" href="#">Delete</a>
+                        </td>`
+                    }
+                    html+= `</tbody>
+                        </table>
+                    </div>
+                </div>
+                `
+    centerCard.innerHTML = html
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -522,7 +553,7 @@ function runGame(e){
             {
             // CLOCK:
             globalThis.game_items = data;
-            console.log(game_items.monsters[0])
+            console.log(game_items.notes[0])
             var time = data.clock_data.time_active;
             var days = data.clock_data.day;
             clockCard.innerHTML =
@@ -535,6 +566,19 @@ function runGame(e){
                     <input type="submit" value="Change" onclick="changeClock(event)">
                 </div>
             `
+        // NOTES:
+        function list_notes(){
+            for(var i=0; i<game_items.notes.length; i++){
+                noteTable.innerHTML += `
+                    <td>${game_items.notes[i].title}</td>
+                    <td>
+                        <a value="${game_items.notes[i].id}" class="text-light" href="#">View</a> | 
+                        <a value="${game_items.notes[i].id}" class="text-light" href="#">Delete</a>
+                    </td>
+                `
+            }
+        }
+        list_notes();
         // PLAYER LIST:
         function list_chars(){ 
             playerCardDiv.innerHTML = `<p class="border-bottom border-2 border-dark"><strong>There are ${data.players.length} players in this game</strong></p>`
@@ -685,6 +729,19 @@ function saveClock(e,element){
     })
 }
 
+//AJAX: Save note =>
+function saveNote(e){
+    e.preventDefault();
+    var noteForm =document.getElementById(`note-form`)
+    var form = new FormData(noteForm);
+    console.log('Clicked: addMonster()', noteForm);
+    fetch('http://127.0.0.1:5000/save/monster', {method:'Post', body: form})
+    .then(res => res.json())
+    .then(data =>{
+        console.log(data);
+    })
+}
+
 //AJAX: Add Monster to game =>
 function addMonster(e){
     e.preventDefault();
@@ -696,7 +753,6 @@ function addMonster(e){
     .then(data =>{
         console.log(data);
         getMonsterData(e,data)
-        //Display new card at bottom of monsters ingame list =>
     })
 }
 //=================================================================================================
@@ -733,6 +789,7 @@ function inGameMonsterCard(e,element){
         var dexMod = modifiers(data.dexterity);
         var charMod = modifiers(data.charisma);
         var wisMod = modifiers(data.wisdom);
+
         // Monster Action Cards___________________________________________________________________
         function actionCards(data){
             for(var num=0; num<data.actions.length; num++){

@@ -1,6 +1,6 @@
 body {
-background-image: url("https://images.pexels.com/photos/1165982/pexels-photo-1165982.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
-/* background-repeat: no-repeat; */
+background-image: url(../Assets/loginbg3.jpg);
+background-repeat: no-repeat;
 background-attachment: fixed;
 background-position: center;
 background-size: auto;

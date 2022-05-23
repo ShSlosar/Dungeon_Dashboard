@@ -56,11 +56,7 @@ class Character:
         result = connectToMySQL(database).query_db( query, data )
         
         return cls(result[0])
-
-    @classmethod
-    def update(cls,data):
-        pass
-
+    
     @classmethod
     def delete(cls,data):
         query  = "DELETE FROM characters WHERE id = %(id)s;"

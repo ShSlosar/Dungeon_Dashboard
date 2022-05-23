@@ -113,7 +113,8 @@ def run_game():
             'email' : current_user.email
         },
         'players' :[],
-        'monsters' :[]
+        'monsters' :[],
+        'notes' :[]
         }
     print('Length', len(current_game.monsters))
     for i in range (0,len(current_game.monsters)):
@@ -146,6 +147,18 @@ def run_game():
             "updated_at" : players.updated_at
         }
         data['players'].append(player)
+        
+    for notes in current_game.notes:
+        note = {
+            "id" : notes.id,
+            "title" :notes.title,
+            "content" :notes.content,
+            "dm_id" : notes.dm_id,
+            "game_id" : notes.game_id,
+            "created_at" : notes.created_at,
+            "updated_at" : notes.updated_at
+        }
+        data['notes'].append(note)
     # print('+================+')
     # print("game:")
     # print("dm:")
