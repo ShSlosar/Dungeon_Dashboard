@@ -5,7 +5,8 @@ from flask_app.models.user import User
 from flask_app.models.game import Game
 from flask_app.models.clock import Clock
 from flask_app.models.monster import Monster
-from flask_app.controllers import monster_cont, clock_cont, users,character_cont
+from flask_app.models.note import Note
+from flask_app.controllers import monster_cont, clock_cont, users,character_cont,note_cont
 from datetime import datetime, timedelta
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)

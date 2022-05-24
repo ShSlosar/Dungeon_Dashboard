@@ -41,6 +41,9 @@ input[type=time]::placeholder{
     color:  rgba(255, 255, 255, 0.401) ;
     background-color: rgba(85, 79, 26, 0.51);
 }
+textarea::placeholder{
+    color:  rgba(255, 255, 255, 0.401);
+}
 /* .text-button{
     position: fixed;
 } */

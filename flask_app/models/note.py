@@ -31,13 +31,14 @@ class Note:
         SELECT * FROM notes
         WHERE id = %(id)s
         """
-        return connectToMySQL(database).query_db( query, data )
+        result = connectToMySQL(database).query_db( query, data )
+        return cls(result[0])
     
     @classmethod
     def update(cls,data):
         query= """
         UPDATE notes SET
-        title=%(title)s, content=%(content)s,
+        title=%(title)s, content=%(content)s
         WHERE id = %(id)s
         """
         return connectToMySQL(database).query_db(query, data)
