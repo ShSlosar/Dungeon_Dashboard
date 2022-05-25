@@ -99,6 +99,23 @@ function displayMods(element){
 }
 //-------------------------------------------------------------------------------------------
 
+// Add To initiative Card_____________________________________________________________________
+function addPlayerToIni(e,element){
+    globalThis.initiativeTbl = [];
+
+    initiativeCard.innerHTML += `
+        <div class="ini w-25 border-end border-2 border-dark d-flex justify-content-evenly align-items-center">  
+            <div class=" col-4 border-end border-1 border-secondary">
+                <p><strong>#1. Wrexnar</strong></p>
+            </div>
+            <div class="col-5 d-flex flex-column">
+                <p><strong>HP:</strong> <input class="w-50" type="number" value="${data.hp}"></p>
+                <input class="sub-btn justify-self-center" type="button" value="Remove">
+            </div>
+        </div>
+    `
+}
+
 // Change modifier back to stat on mouse off__________________________________________________
 function revertToStat(element,data){
     element.innerText = data;
@@ -270,7 +287,7 @@ function displayPlayerEditForm(e,element){
 
 //Revert Center Card to Default View_____________________________________________________________
 function defaultCenterCard(e){
-    e.preventDefault();
+    // e.preventDefault();
     html = `
         <h2 class="text-center">notes</h2>
         <div class="d-flex justify-content-evenly ">
