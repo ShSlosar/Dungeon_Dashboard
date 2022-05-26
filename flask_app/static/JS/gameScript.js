@@ -7,7 +7,9 @@ var actions = document.getElementById('actions');
 var playerCardDiv = document.getElementById('participant-list');
 var centerCard = document.getElementById('notes-card');
 var clockCard = document.getElementById('clock-card');
-var noteTable = document.getElementById('note-table-body')
+var noteTable = document.getElementById('note-table-body');
+var initiativeCard = document.getElementById('ini-card');
+var clearIniBtn = document.getElementById('ini-btn');
 //----------------------------------------------------------------
 
 // Skill-to-Modifier Function_____________________________________________________
@@ -100,19 +102,43 @@ function displayMods(element){
 //-------------------------------------------------------------------------------------------
 
 // Add To initiative Card_____________________________________________________________________
-function addPlayerToIni(e,element){
-    globalThis.initiativeTbl = [];
-
-    initiativeCard.innerHTML += `
-        <div class="ini w-25 border-end border-2 border-dark d-flex justify-content-evenly align-items-center">  
-            <div class=" col-4 border-end border-1 border-secondary">
-                <p><strong>#1. Wrexnar</strong></p>
+function addToIni(e,element){                       //Left off here: find a way to add to INI and save? to game new DB table?
+    e.preventDefault();
+    clearIniBtn.type = "button";
+    if(element.player_id){
+        for(i=0; i<game_items.players.length; i++){
+            // console.log(game_items.players[i].id);
+            if(element.player_id.value == game_items.players[i].id){
+                data = game_items.players[i];
+            }
+        }
+        initiativeCard.innerHTML += `
+            <div class="ini mx-1 w-25 border-end border-2 border-dark d-flex justify-content-evenly align-items-center">
+                    <p class="text-center col-4 border-end border-1 border-secondary"><strong>${data.name}</strong></p>
+                    <p class="col-4"><strong>HP:</strong> <input class="w-50" type="number" value="${data.hp}"></p>
             </div>
-            <div class="col-5 d-flex flex-column">
-                <p><strong>HP:</strong> <input class="w-50" type="number" value="${data.hp}"></p>
-                <input class="sub-btn justify-self-center" type="button" value="Remove">
+        `
+    }
+    else{
+        for(i=0; i<game_items.monsters.length; i++){
+            // console.log(game_items.players[i].id);
+            if(element.monster_id.value == game_items.monsters[i].id){
+                data = game_items.monsters[i];
+            }
+        }
+        initiativeCard.innerHTML += `
+            <div class="ini mx-1 w-25 border-end border-2 border-dark d-flex justify-content-evenly align-items-center">
+                    <p class="text-center col-4 border-end border-1 border-secondary"><strong>${data.name}</strong></p>
+                    <p class="col-4"><strong>HP:</strong> <input class="w-50" type="number" value="${data.hit_points}"></p>
             </div>
-        </div>
+        `
+    }
+}
+//-----------------------------------------------------------------------------------------------------------------------
+function clearIniCards(e,element){
+    e.preventDefault();
+    initiativeCard.innerHTML= `
+    <input id="ini-btn" onclick="clearIniCards(event,this)" class="" type="hidden" value="Clear All">
     `
 }
 
@@ -217,7 +243,7 @@ function displayPlayerForm(element){
 //Display Edit Player Form______________________________________________________________________
 function displayPlayerEditForm(e,element){
     e.preventDefault();
-    for(i=0; i<element.player_id.value; i++){
+    for(i=0; i<game_items.players.length; i++){
         // console.log(game_items.players[i].id);
         if(element.player_id.value == game_items.players[i].id){
             data = game_items.players[i];
@@ -434,10 +460,6 @@ function displayPlayers(e){
         playerCardDiv.innerHTML += 
         `<div class="d-flex justify-content-center border-bottom border-dark p-2 mt-2">
             <div class="d-flex flex-column">
-                <form id="" onsubmit="removePlayerFromItems(event, this)" class="remove-link">
-                    <input type="hidden" name="player_id" value="${game_items.players[i].id}">
-                    <input class="sub-btn " value="remove" type="submit">
-                </form>
                 <h4 class="text-center"><strong>${game_items.players[i].name}</strong></h4>
                 <div class="d-flex justify-content-evenly border-top border-dark">
                     <p><strong>AC: </strong>${game_items.players[i].ac}</p>
@@ -478,14 +500,17 @@ function displayPlayers(e){
                 </table>
                 <div class="d-flex justify-content-between">
                     <div>
-                    <form id="" onsubmit="getPlayerFromList(event,this)" class=" ">
-                    <input type="hidden" name="player_id" value="${game_items.players[i].id}">
-                    <input class="sub-btn " value="View sheet" type="submit">
-                    </form>
+                        <form id="" onsubmit="getPlayerFromList(event,this)" class=" ">
+                            <input type="hidden" name="player_id" value="${game_items.players[i].id}">
+                            <input class="sub-btn " value="View sheet" type="submit">
+                        </form>
                     </div>
-                    <input class="sub-btn " value="Add to inititave" type="submit">
+                    <form id="" onsubmit="addToIni(event,this)" class=" ">
+                        <input type="hidden" name="player_id" value="${game_items.players[i].id}">
+                        <input class="sub-btn" value="Add to inititave" type="submit">
+                    </form>
                 </div>
-                </div>
+            </div>
         </div>`
     }
 }
@@ -560,10 +585,6 @@ function displayMonsters(e){
         monsters.innerHTML+=
         `<div class="d-flex justify-content-center border-bottom border-dark p-2 mt-2">
             <div class="d-flex flex-column">
-                <form id="" onsubmit="removeMonsterFromItems(event, this)" class="remove-link">
-                    <input type="hidden" name="monster_id" value="${game_items.monsters[i].id}">
-                    <input class="sub-btn " value="remove" type="submit">
-                </form>
                 <h4 class="text-center"><strong>${game_items.monsters[i].name}</strong></h4>
                 <div class="d-flex justify-content-evenly border-top border-dark">
                     <p><strong>AC: </strong>${game_items.monsters[i].armor_class}</p>
@@ -604,12 +625,15 @@ function displayMonsters(e){
                 </table>
                 <div class="d-flex justify-content-between">
                     <div>
-                    <form id="" onsubmit="inGameMonsterCard(event,this)" class=" ">
-                    <input type="hidden" name="monster_indx" value="${game_items.monsters[i].index}">
-                    <input class="sub-btn" value="View sheet" type="submit">
-                    </form>
+                        <form id="" onsubmit="inGameMonsterCard(event,this)" class=" ">
+                            <input type="hidden" name="monster_indx" value="${game_items.monsters[i].index}">
+                            <input class="sub-btn" value="View sheet" type="submit">
+                        </form>
                     </div>
-                    <input class="sub-btn " value="Add to inititave" type="submit">
+                    <form id="" onsubmit="addToIni(event,this)" class=" ">
+                        <input type="hidden" name="monster_id" value="${game_items.monsters[i].id}">
+                        <input class="sub-btn" value="Add to inititave" type="submit">
+                    </form>
                 </div>
             </div>
         </div>`
@@ -669,6 +693,7 @@ function runGame(e){
         .then (data =>
             {
             // CLOCK:
+            globalThis.iniList = [];
             globalThis.game_items = data;
             console.log(game_items.notes[0])
             var time = data.clock_data.time_active;
@@ -735,10 +760,6 @@ function runGame(e){
                 playerCardDiv.innerHTML +=  // <= LEFT OFF HERE CREATE REMOVE & EDIT FOR PLAYERS/ REMOVE FOR MONSTERS 5/19=====================
                 `<div class="d-flex justify-content-center border-bottom border-dark p-2 mt-2">
                 <div class="d-flex flex-column">
-                    <form id="" onsubmit="removePlayerFromItems(event, this)" class="remove-link">
-                        <input type="hidden" name="player_id" value="${data.players[i].id}">
-                        <input class="sub-btn " value="remove" type="submit">
-                    </form>
                         <h4 class="text-center"><strong>${data.players[i].name}</strong></h4>
                         <div class="d-flex justify-content-evenly border-top border-dark">
                             <p><strong>AC: </strong>${data.players[i].ac}</p>
@@ -778,15 +799,15 @@ function runGame(e){
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-between">
-                            
                             <form id="" onsubmit="getPlayerFromList(event, this)" class=" ">
                                 <input type="hidden" name="player_id" value="${data.players[i].id}">
                                 <input class="sub-btn " value="View sheet" type="submit">
                             </form>
-                            
-                            <input class="sub-btn " value="Add to inititave" type="submit">
+                            <form id="" onsubmit="addToIni(event,this)" class="">
+                                <input type="hidden" name="player_id" value="${data.players[i].id}">
+                                <input class="sub-btn" value="Add to inititave" type="submit">
+                            </form>
                         </div>
-                        
                     </div>
                 </div>`
             }
@@ -800,10 +821,6 @@ function runGame(e){
                 monsters.innerHTML+=
                 `<div class="d-flex justify-content-center border-bottom border-dark p-2 mt-2">
                         <div class="d-flex flex-column">
-                            <form id="" onsubmit="removeMonsterFromItems(event, this)" class="remove-link">
-                                <input type="hidden" name="monster_id" value="${data.monsters[i].id}">
-                                <input class="sub-btn " value="remove" type="submit">
-                            </form>
                             <h4 class="text-center"><strong>${data.monsters[i].name}</strong></h4>
                             <div class="d-flex justify-content-evenly border-top border-dark">
                                 <p><strong>AC: </strong>${data.monsters[i].armor_class}</p>
@@ -844,12 +861,15 @@ function runGame(e){
                             </table>
                             <div class="d-flex justify-content-between">
                                 <div>
-                                <form id="" onsubmit="inGameMonsterCard(event,this)" class=" ">
-                                    <input type="hidden" name="monster_indx" value="${data.monsters[i].index}">
-                                    <input class="sub-btn " value="View sheet" type="submit">
-                                </form>
+                                    <form id="" onsubmit="inGameMonsterCard(event,this)" class=" ">
+                                        <input type="hidden" name="monster_indx" value="${data.monsters[i].index}">
+                                        <input class="sub-btn " value="View sheet" type="submit">
+                                    </form>
                                 </div>
-                                <input class="sub-btn " value="Add to inititave" type="submit">
+                                <form id="" onsubmit="addToIni(event,this)" class=" ">
+                                    <input type="hidden" name="monster_id" value="${data.monsters[i].id}">
+                                    <input class="sub-btn" value="Add to inititave" type="submit">
+                                </form>
                             </div>
                         </div>
                     </div>`
@@ -1152,13 +1172,13 @@ function displayPlayerCard(e){
                     </tbody>
                 </table>
                 <div class="d-flex justify-content-evenly">
-                    <form id="" onsubmit="removePlayerFromItems(event, this)" class="">
-                        <input type="hidden" name="player_id" value="${data.id}">
-                        <input class="sub-btn " value="Remove" type="submit">
-                    </form>
                     <form id="" onsubmit="displayPlayerEditForm(event,this)" class="">
                         <input type="hidden" name="player_id" value="${data.id}">
                         <input class="sub-btn " value="Edit" type="submit">
+                    </form>
+                    <form id="" onsubmit="removePlayerFromItems(event, this)" class="">
+                        <input type="hidden" name="player_id" value="${data.id}">
+                        <input class="sub-btn " value="Remove" type="submit">
                     </form>
                 </div>`
             })
