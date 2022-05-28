@@ -53,16 +53,16 @@ class Game:
         query  = """
         SELECT * FROM games 
         JOIN clocks ON clocks.game_id = games.id
-        JOIN characters ON characters.game_id = games.id
+        LEFT JOIN characters ON characters.game_id = games.id
         WHERE games.id = %(id)s""";
         query2 = """
         SELECT * FROM games
-        JOIN npcs ON npcs.game_id = games.id
+        LEFT JOIN npcs ON npcs.game_id = games.id
         WHERE games.id = %(id)s
         """
         query3 = """
         SELECT * FROM games
-        JOIN notes ON notes.game_id = games.id
+        LEFT JOIN notes ON notes.game_id = games.id
         WHERE games.id = %(id)s
         """
         result = connectToMySQL(database).query_db(query, data)
@@ -70,52 +70,62 @@ class Game:
         result3 = connectToMySQL(database).query_db(query3, data)
         one_game = cls(result[0])
         for row in result:
-            character_data = {
-                "id" : row['characters.id'],
-                "name" : row['characters.name'],
-                "lvl" : row['lvl'],
-                "race" : row['race'],
-                "class_type" : row['class_type'],
-                "alignment" : row['alignment'],
-                "hp" : row['hp'],
-                "ac" : row['ac'],
-                "speed" : row['speed'],
-                "str" : row['str'],
-                "dex" : row['dex'],
-                "intel" : row['intel'],
-                "wis" : row['wis'],
-                "const" : row['const'],
-                "chars" : row['chars'],
-                "creator_id" : row['creator_id'],
-                "dm_id" : row['characters.dm_id'],
-                "game_id" : row['characters.game_id'],
-                "created_at" : row['characters.created_at'],
-                "updated_at" : row['characters.updated_at']
-            }
-            one_game.players.append(character.Character(character_data))
+            if row['characters.id']:
+                character_data = {
+                    "id" : row['characters.id'],
+                    "name" : row['characters.name'],
+                    "lvl" : row['lvl'],
+                    "race" : row['race'],
+                    "class_type" : row['class_type'],
+                    "alignment" : row['alignment'],
+                    "hp" : row['hp'],
+                    "ac" : row['ac'],
+                    "speed" : row['speed'],
+                    "str" : row['str'],
+                    "dex" : row['dex'],
+                    "intel" : row['intel'],
+                    "wis" : row['wis'],
+                    "const" : row['const'],
+                    "chars" : row['chars'],
+                    "creator_id" : row['creator_id'],
+                    "dm_id" : row['characters.dm_id'],
+                    "game_id" : row['characters.game_id'],
+                    "created_at" : row['characters.created_at'],
+                    "updated_at" : row['characters.updated_at']
+                }
+                one_game.players.append(character.Character(character_data))
+            else:
+                break
+            
         for row in result2:
-            monster_data = {
-                "id" : row['npcs.id'],
-                "indx" : row['indx'],
-                "dm_id" : row['npcs.dm_id'],
-                "game_id" : row['game_id'],
-                "created_at" : row['npcs.created_at'],
-                "updated_at" : row['npcs.updated_at']
-            }
-            one_game.monsters.append(monster.Monster(monster_data))
+            if row['npcs.id']:
+                monster_data = {
+                    "id" : row['npcs.id'],
+                    "indx" : row['indx'],
+                    "dm_id" : row['npcs.dm_id'],
+                    "game_id" : row['game_id'],
+                    "created_at" : row['npcs.created_at'],
+                    "updated_at" : row['npcs.updated_at']
+                }
+                one_game.monsters.append(monster.Monster(monster_data))
+            else:
+                break
             
         for row in result3:
-            note_data = {
-            "id" : row['notes.id'],
-            "title" : row['title'],
-            "content" : row['content'],
-            "dm_id" : row['notes.dm_id'],
-            "game_id" : row['game_id'],
-            "created_at" : row['notes.created_at'],
-            "updated_at" : row['notes.updated_at']
-            }
-            one_game.notes.append(note.Note(note_data))
-        
+            if row['notes.id']:
+                note_data = {
+                "id" : row['notes.id'],
+                "title" : row['title'],
+                "content" : row['content'],
+                "dm_id" : row['notes.dm_id'],
+                "game_id" : row['game_id'],
+                "created_at" : row['notes.created_at'],
+                "updated_at" : row['notes.updated_at']
+                }
+                one_game.notes.append(note.Note(note_data))
+            else:
+                break
+
         clock_data = {
             "id" : result[0]["clocks.id"],
             "day" : result[0]["day"],

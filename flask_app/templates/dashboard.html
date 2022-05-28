@@ -7,36 +7,58 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://kit.fontawesome.com/994cf64bcf.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script defer src="../static/JS/userDashScript.js"></script>
     <script defer src="/static/JS/Script.js"></script>
     <title>Dashboard</title>
 </head>
 <body>
-    <header id="user-header" class="d-flex align-items-center justify-content-evenly border rounded border-3 border-dark ">
+    <header id="user-header" class="d-flex align-items-center justify-content-around border rounded border-3 px-3 border-dark ">
         <img src="static/Assets/dunDashLogo.png" alt="Logo">
-        <h1 class="text-center">Welcome {{user.first_name}}</h1>
-        <div class="d-flex align-items-center">
-            <i style="color:rgb(255, 255, 255)" class="fa-2xl fa-solid fa-gear px-2"></i>
-            <h3><a href="/user/edit">Account</a></h3>
-        </div>
-        <div class="d-flex align-items-center">
-            <i style="color:rgb(255, 255, 255)" class="fa-2xl fa-solid fa-dungeon px-2"></i>
-            <h3><a href="/logout">Logout</a></h3>
-        </div>
+        <h1 class="col-4 text-center">Welcome {{user.handle}}</h1>
+        <h5 class="col-2"><a href="/logout">Logout</a></h5>
     </header>
-    <div id="card-container" class="container d-flex justify-content-around mt-5">
-        <div class="mt-auto card mx-2 col-3 p-3">
-            <img src="{{ url_for('static', filename='Assets/logoFinalX.png') }}" alt="Logo">
-            <h5 class="text-center"><a class="text-light" href="#">Create Charecter or NPC</a></h5>
+    <div id="card-container" class="container d-flex flex-column justify-content-center mt-5">
+        <div id="options" class="text-light d-flex justify-content-center align-items-center">
+            <h3 id="main-card-btn" class="">My Dashboards</h3>
+            <h3>|</h3>
+            <h3 id="un-main-card-btn" class="">Acoount</h3>
         </div>
-        <div class="mt-auto card mx-2 col-3 p-3">
-            <img src="{{ url_for('static', filename='Assets/logoFinalX.png') }}" alt="Logo">
-            <h5 class="text-center"><a onclick="newDash(this)" class="text-light" href="#">Start a New Dashboard</a></h5>
-        </div>
-        <div class="mt-auto card mx-2 col-3 p-3">
-            <img src="{{ url_for('static', filename='Assets/logoFinalX.png') }}" alt="Logo">
-            <h5 class="text-center"><a class="text-light" href="#">Your Dashboards</a></h5>
+        <div id="main-card" class="mt-auto mx-auto card col-8 p-3">
+            <p onclick="runUserDash()" class="fa-solid fa-xmark"></p>
+            <h5 class="text-center">Edit Account</h5>
+            <form class="col-8 d-flex flex-column mx-auto" action="">
+                <div>
+                    <div class="d-flex">
+                        <div class="  m-3">
+                            <label for="first_name">first name</label>
+                            <input name="first_name" class="acc-form" type="text">
+                        </div>
+                        <div class=" m-3">
+                            <label for="last_name">last name</label>
+                            <input name="last_name" class="acc-form" type="text">
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class=" m-3">
+                            <label for="email">current email</label>
+                            <input name="email" class="acc-form" type="text">
+                        </div>
+                        <div class=" m-3">
+                            <label for="handle">current handle</label>
+                            <input name="handle" class="acc-form" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column justify-content-center m-3 text-center">
+                    <label for="password">password</label>
+                    <input name="password" class="" type="password">
+                </div>
+            </form>
+            <h5 class=" text-center"><a class="delete-acc" href="">Delete Account</a></h5>
         </div>
     </div>
 </body>

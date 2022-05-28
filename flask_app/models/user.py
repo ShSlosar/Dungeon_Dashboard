@@ -2,6 +2,7 @@ from flask_app.config.mysqlconnection import connectToMySQL
 from flask_app import app
 from flask import render_template,redirect,request,session,flash
 from flask_bcrypt import Bcrypt
+from flask_app.models import game,clock,monster,character,note
 import re
 import pprint   
 bcrypt = Bcrypt(app) 
@@ -19,6 +20,8 @@ class User:
         self.password = data['password']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
+        self.games = []
+        self.players = []
         
     @staticmethod
     def validate_user(data):
@@ -100,6 +103,21 @@ class User:
         print('______________________________________')
         return cls(result[0])
     
+    @classmethod
+    def get_with_data(cls,data):
+        query  = """
+        SELECT * FROM users 
+        JOIN games ON
+        users.id = games.dm_id
+        WHERE users.id = %(id)s""";
+        result = connectToMySQL(database).query_db(query, data)
+        pprint.pprint(result)
+        one_user = cls(result[0])
+        for row in result:
+            one_user.games.append(game.Game.get_by_id({"id":row['games.id']}))
+        print(one_user)
+        
+        return (one_user)
     
     # @classmethod
     # def delete(cls, id):

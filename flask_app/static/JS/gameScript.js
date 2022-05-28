@@ -315,15 +315,15 @@ function displayPlayerEditForm(e,element){
 function defaultCenterCard(e){
     // e.preventDefault();
     html = `
-        <h2 class="text-center">notes</h2>
-        <div class="d-flex justify-content-evenly ">
+        <h2 class="text-center border-bottom border-3 border-dark mb-4 pb-4">notes</h2>
+        <div class="d-flex justify-content-evenly align-items-center">
             <form id="note-form" onsubmit="saveNote(event)" class="d-flex flex-column p-2">
                 <input name="title" type="text" placeholder="Title">
                 <textarea class="mt-2" placeholder="Content..." name="content" id="" cols="30" rows="10"></textarea>
-                <input class="mt-2" type="submit" value="save note">
+                <input class="sub-btn mt-2" type="submit" value="save note">
             </form>
             <div id="note-table" class="notes-table p-2 w-50">
-                <table class="table text-center ">
+                <table class="table text-center note-tbl">
                     <thead>
                         <th>title</th>
                         <th>options</th>
@@ -372,12 +372,12 @@ function noteEditForm(e,element){
             <form id="update-note-form" onsubmit="updateNote(event)" class="d-flex flex-column p-2">
                 <input name="title" type="text" value="${data.title}">
                 <textarea class="mt-2" placeholder="Content..." name="content" id="" cols="30" rows="10">${data.content}</textarea>
-                <input class="mt-2" type="submit" value="save note">
+                <input class="sub-btn mt-2" type="submit" value="save note">
                 <input name="id" type="hidden" value="${data.id}">
-                <input onclick="defaultCenterCard(event)" type="button" value="Back">
+                <input class="sub-btn" onclick="defaultCenterCard(event)" type="button" value="Back">
             </form>
             <div id="note-table" class="notes-table p-2 w-50">
-                <table class="table text-center ">
+                <table class="table text-center note-tbl">
                     <thead>
                         <th>title</th>
                         <th>options</th>
@@ -458,7 +458,7 @@ function displayPlayers(e){
     for(var i=0; i<game_items.players.length; i++){
         console.log(game_items.players[i].name);
         playerCardDiv.innerHTML += 
-        `<div class="d-flex justify-content-center border-bottom border-dark p-2 mt-2">
+        `<div class="player-crd d-flex justify-content-center border-bottom border-light p-2 mt-2">
             <div class="d-flex flex-column">
                 <h4 class="text-center"><strong>${game_items.players[i].name}</strong></h4>
                 <div class="d-flex justify-content-evenly border-top border-dark">
@@ -583,7 +583,7 @@ function displayMonsters(e){
     monsters.innerHTML = `<p><strong>There are ${game_items.monsters.length} monsters in this game</strong></p>`
     for(var i=0; i<game_items.monsters.length; i++){
         monsters.innerHTML+=
-        `<div class="d-flex justify-content-center border-bottom border-dark p-2 mt-2">
+        `<div class="monst-crd d-flex justify-content-center border-bottom border-light p-2 mt-2">
             <div class="d-flex flex-column">
                 <h4 class="text-center"><strong>${game_items.monsters[i].name}</strong></h4>
                 <div class="d-flex justify-content-evenly border-top border-dark">
@@ -674,7 +674,7 @@ function defaultClockCard(e){
     </div>
     <div class="d-flex flex-column justify-content-around">
         
-        <input type="submit" value="Change" onclick="changeClock(event)">
+        <input class="sub-btn" type="submit" value="Change" onclick="changeClock(event)">
     </div>
     `
 }
@@ -705,21 +705,21 @@ function runGame(e){
                     <h5 ><strong>Time:</strong> <span id="timer">${time}</span> </h5>
                 </div>
                 <div class="d-flex flex-column justify-content-around">
-                    <input type="submit" value="Change" onclick="changeClock(event)">
+                    <input class="sub-btn" type="submit" value="Change" onclick="changeClock(event)">
                 </div>
             `
         // NOTES:
         function list_notes(){
             html = `
-            <h2 class="text-center">notes</h2>
-            <div class="d-flex justify-content-evenly ">
+            <h2 class="title-txt text-center border-bottom border-3 border-dark mb-4 pb-4">Notes</h2>
+            <div class="d-flex justify-content-evenly align-items-center">
                 <form id="note-form" onsubmit="saveNote(event)" class="d-flex flex-column p-2">
                     <input name="title" type="text" placeholder="Title">
                     <textarea class="mt-2" placeholder="Content..." name="content" id="" cols="30" rows="10"></textarea>
-                    <input class="mt-2" type="submit" value="save note">
+                    <input class="sub-btn mt-2" type="submit" value="save note">
                 </form>
-                <div id="note-table" class="notes-table p-2 w-50">
-                    <table class="table text-center ">
+                <div id="note-table" class=" p-2 w-50">
+                    <table class="table text-center note-tbl">
                         <thead>
                             <th>title</th>
                             <th>options</th>
@@ -758,8 +758,8 @@ function runGame(e){
             for(var i=0; i<data.players.length; i++){
                 console.log(data.players[i].name);
                 playerCardDiv.innerHTML +=  // <= LEFT OFF HERE CREATE REMOVE & EDIT FOR PLAYERS/ REMOVE FOR MONSTERS 5/19=====================
-                `<div class="d-flex justify-content-center border-bottom border-dark p-2 mt-2">
-                <div class="d-flex flex-column">
+                `<div class="player-crd d-flex justify-content-center border-bottom border-light p-2 mt-2">
+                    <div class="d-flex flex-column">
                         <h4 class="text-center"><strong>${data.players[i].name}</strong></h4>
                         <div class="d-flex justify-content-evenly border-top border-dark">
                             <p><strong>AC: </strong>${data.players[i].ac}</p>
@@ -819,7 +819,7 @@ function runGame(e){
             for(var i=0; i<data.monsters.length; i++){
                 console.log(data.monsters[i].id)
                 monsters.innerHTML+=
-                `<div class="d-flex justify-content-center border-bottom border-dark p-2 mt-2">
+                `<div class="monst-crd d-flex justify-content-center border-bottom border-light p-2 mt-2">
                         <div class="d-flex flex-column">
                             <h4 class="text-center"><strong>${data.monsters[i].name}</strong></h4>
                             <div class="d-flex justify-content-evenly border-top border-dark">
@@ -1311,13 +1311,12 @@ function monsterSearch2(e){
         function list_res(){ 
             monsters.innerHTML = `
             <i onclick="displayMonsters(event)" class="fa-solid fa-xmark"></i>
-            <p><strong>Displaying ${data.results.length} results for challenge rating ${rating}:</strong></p>`
+            <p  class="border-bottom border-2 border-dark"><strong>Displaying ${data.results.length} results for challenge rating ${rating}:</strong></p>`
             for(var i=0; i<data.results.length; i++){
                 console.log(data.results[i].index);
                 monsters.innerHTML +=
                 `<div class="d-flex justify-content-between border-bottom border-dark p-2 mt-2">
-                    <p><strong>${i+1}.</strong></p>
-                    <h5 class="text-start">${data.results[i].name}</h5>
+                    <h5 class="text-start"><strong>${i+1}. </strong>${data.results[i].name}</h5>
                         <div class="d-flex justify-content-end">
                             <form id="" onsubmit="addMonsterToGame(event,this)" class=" ">
                                 <input type="hidden" name="monster_indx" value="${data.results[i].index}">

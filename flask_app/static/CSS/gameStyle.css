@@ -1,23 +1,32 @@
 body {
-    background-image: url(../Assets/parchment.jpg);
+    background-image: url(../Assets/bgPic.jpg);
     /* background-image: url("https://images.pexels.com/photos/172284/pexels-photo-172284.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"); */
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
-    background-size: cover;
+    background-size: auto;
     /* background-color: #b28665;
 background-image: url("data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='Page-1' fill='none' fill-rule='evenodd'%3E%3Cg id='brick-wall' fill='%23000000' fill-opacity='0.15'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); */
 }
-
+.title-txt,
+p,th,td,label,h4,h5,a{
+    font-family: 'Roboto', sans-serif;
+    color: rgba(190, 190, 190, 0.819);
+}
 #game-header
 {
-    background-color: rgba(106, 72, 37, 0.269);
-    box-shadow: 5px 5px 5px 5px rgba(17, 21, 13, 0.64);
+    background-color: rgba(128, 123, 123, 0.31);
+    box-shadow: 2px 2px 2px 2px rgba(17, 21, 13, 0.64);
+    max-height: 125px;
 }
-
+#note-table{
+    max-height: 300px;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.51);
+}
 .game-card,
 .game-card-main {
-    background-color: rgba(106, 72, 37, 0.269);
+    background-color: rgba(128, 123, 123, 0.31);
     box-shadow: 2px 2px 2px 2px  rgba(0, 0, 0, 0.24);
     border: solid 2px rgba(0, 0, 0, 0.221);
     border-radius: 5px;
@@ -25,43 +34,46 @@ background-image: url("data:image/svg+xml,%3Csvg width='42' height='44' viewBox=
 .game-card-main{
     height: 500px;
 }
+.ini{
+    background-color: rgba(0, 0, 0, 0.51);
+}
 input[type=number],
 input[type=submit],
 input[type=btn],
 input[type=button],
 input[type=text],
 input[type=time],
-select{
-    color:  rgb(255, 255, 255) ;
-    background-color: rgba(85, 79, 26, 0.51);
+select,
+textarea{
+    color:  rgba(255, 255, 255, 0.51) ;
+    background-color: rgba(0, 0, 0, 0.51);
 }
 input[type=number]::placeholder,
 input[type=text]::placeholder,
-input[type=time]::placeholder{
-    color:  rgba(255, 255, 255, 0.401) ;
-    background-color: rgba(85, 79, 26, 0.51);
+input[type=time]::placeholder,
+textarea::placeholder{
+    color:rgba(211, 213, 210, 0.403);
 }
 input[type=submit],
 input[type=button]{
     border: none;
 }
-textarea::placeholder{
-    color:  rgba(255, 255, 255, 0.401);
-}
+
 /* .text-button{
     position: fixed;
 } */
-textarea{
+/* textarea{
     color:  rgb(255, 255, 255) ;
     background-color: rgba(85, 79, 26, 0.51);
-}
+} */
 #monster-result-card{
     overflow: auto;
 }
 .game-card-main::-webkit-scrollbar-thumb,
 textarea::-webkit-scrollbar-thumb,
-#ini-card::-webkit-scrollbar-thumb {
-    background: #07350a63;
+#ini-card::-webkit-scrollbar-thumb,
+#note-table::-webkit-scrollbar-thumb {
+    background:  rgba(85, 79, 26, 0.435);
     border-radius: 1ex;
     box-shadow: none;
 }
@@ -70,7 +82,9 @@ textarea::-webkit-scrollbar-thumb,
 textarea::-webkit-scrollbar-corner,
 textarea::-webkit-scrollbar,
 #ini-card::-webkit-scrollbar,
-#ini-card::-webkit-scrollbar-corner{
+#ini-card::-webkit-scrollbar-corner,
+#note-table::-webkit-scrollbar,
+#note-table::-webkit-scrollbar-corner{
     background: none;
 }
 input[type="number"]::-webkit-outer-spin-button,
@@ -79,7 +93,7 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 0;
 }
 .sub-btn:hover{
-    background-color: rgba(85, 79, 26, 0.269);;
+    background-color: rgba(85, 79, 26, 0.269);
 }
 
 .ini{
@@ -96,12 +110,12 @@ input[type="number"]::-webkit-inner-spin-button {
     border: none;
 }
 .positive-modif{
-    color: rgb(44, 88, 0);
+    color: rgb(90, 179, 1);
     font-weight: bold;
     cursor: pointer;
 }
 .negative-modif{
-    color: rgb(133, 6, 6);
+    color: rgb(214, 1, 1);
     font-weight: bold;
     cursor: pointer;
 }
@@ -114,9 +128,10 @@ input[type="number"]::-webkit-inner-spin-button {
     width: 25%;
 }
 #clock-card{
-    max-height: 100px;
-    min-height: 100px;
+    max-height: 120px;
+    min-height: 120px;
 }
 #ini-card{
-    max-height: 100px;
+    max-height: 120px;
+    min-height: 120px;
 }

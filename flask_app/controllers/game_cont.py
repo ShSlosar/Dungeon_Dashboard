@@ -95,10 +95,10 @@ def run_game():
     print(time24)
     data = {
         'game_data' : {
-                'name' : current_game.name,
-                'time_active' : time12,
-                'day' : current_game.gclock.day,
-                'id' : current_game.id
+            'name' : current_game.name,
+            'time_active' : time12,
+            'day' : current_game.gclock.day,
+            'id' : current_game.id
         },
         'clock_data' :{
             'clock_id' : current_game.gclock.id,

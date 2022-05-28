@@ -1,7 +1,9 @@
 from flask_app import app
 from flask import render_template,redirect,request,session,flash
 from flask_app.models.user import User
+from flask_app.controllers import monster_cont, clock_cont,character_cont,note_cont
 import pprint
+from datetime import datetime,time
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 
@@ -25,7 +27,7 @@ def show():
     print('+==================+')
     print('(server)rendering template: dashboard.html')
     print('______________________________________')
-    return render_template("dashboard.html",users=User.get_all(), user=User.get_by_id(data))
+    return render_template("dashboard.html", user=User.get_by_id(data))
 
 @app.route('/create_user',methods=["POST"])
 def create_user():
@@ -85,6 +87,43 @@ def logout():
     session.clear()
     return redirect('/')
 
+@app.route('/user/dash')
+def get_user_data():
+    res = User.get_with_data({"id":session['user_id']})
+    usr = User.get_by_id({"id": session['user_id']})
+    print('Results:')
+    pprint.pprint(res)
+    data ={
+        'user_data' :{
+            "id" : usr.id,
+            "first_name" :usr.first_name,
+            "last_name" :usr.last_name,
+            'handle' : usr.handle,
+            'email' : usr.email,
+            "created_at" : usr.created_at,
+            "updated_at" : usr.updated_at
+        },
+        'games' : []
+    }
+    for game in res.games:
+        time24 = datetime.strptime(str(game.gclock.time_active) , "%H:%M:%S")
+        time12 = time24.strftime("%I:%M:%S %p")
+        timeVal = time24.strftime("%H:%M:%S")
+        date_t =  game.created_at.strftime("%a %d %b %Y")
+        print('CreatedAT:::', date_t)
+        game_data = {
+            'game_data' : {
+                'name' : game.name,
+                'time_active' : time12,
+                'day' : game.gclock.day,
+                'id' : game.id,
+                'created_at' : date_t
+            },
+            'players' :len(game.players),
+            'monsters' :len(game.monsters)
+        }
+        data['games'].append(game_data)
+    return(data)
 
 # @app.route('/user/update',methods=['POST'])
 # def update():

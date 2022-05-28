@@ -30,6 +30,7 @@ function regiCard(){
             <input autocorrect="off" spellcheck="false" autocomplete="off" placeholder="User Name..." class="border border-2 border-dark w-100" type="text" name="handle">
         </div>
         <div class=" my-2">
+            <p></p>
             <input autocorrect="off" spellcheck="false" autocomplete="off" placeholder="First Name..." class="border border-2 border-dark w-100" type="text" name="first_name">
         </div>
         <div class=" my-2">
@@ -52,53 +53,6 @@ function regiCard(){
         </div>
     </form>`
 return card
-}
-function newDash(){
-    var dashContainer = document.querySelector("#card-container");
-    dashContainer.innerHTML = `
-        <div class="option mt-auto card mx-2 col-3 p-3">
-            <img src="static/Assets/logoFinalX.png" alt="Logo">
-            <h5 class="text-center"><a class="text-light" href="#">Create Charecter or NPC</a></h5>
-        </div>
-        <form id='card-form' class=" card mx-2 col-3 p-3" action="/create/game" method="post">
-            <div class="">
-                <i onclick="defaultCard(this)" class="fa-solid fa-xmark"></i>
-                <h5 class=" form-label text-center">Start a new campeign</h5>
-            </div>
-            <div class="">
-                <label class="form-label" for="name">Name your dashboard:</label>
-                <input class="border border-2 border-dark w-100 my-2" type="text" name="name">
-            </div>
-            <div class="">
-                <label class="form-label" for="time_active">Choose starting time:</label>
-                <input class="border border-2 border-dark w-100 my-2" type="time" step="1" name="time_active">
-            </div>
-            <input name="day" value="0" type="hidden">
-            <input class="mx-auto my-2 btn text-center border-2 border-dark" type="submit" value="Launch">
-        </form>
-        <div class="option mt-auto card mx-2 col-3 p-3">
-            <img src="static/Assets/logoFinalX.png" alt="Logo">
-            <h5 class="text-center"><a class="text-light" href="#">Your Dashboards</a></h5>
-        </div>`
-    // document.getElementById('card-container').id = 'form-container'
-return dashContainer;
-}
-function defaultCard(){
-    var dashContainer = document.querySelector("#card-container");
-    dashContainer.innerHTML = `
-        <div class="mt-auto card mx-2 col-3 p-3">
-            <img src="static/Assets/logoFinal (1).png" alt="Logo">
-            <h5 class="text-center"><a class="text-light" href="#">Create Charecter or NPC</a></h5>
-        </div>
-        <div class="mt-auto card mx-2 col-3 p-3">
-            <img src="static/Assets/logoFinal (1).png" alt="Logo">
-            <h5 class="text-center"><a onclick="newDash(this)" class="text-light" href="#">Start a New Dashboard</a></h5>
-        </div>
-        <div class="mt-auto card mx-2 col-3 p-3">
-            <img src="static/Assets/logoFinal (1).png" alt="Logo">
-            <h5 class="text-center"><a class="text-light" href="#">Your Dashboards</a></h5>
-        </div>`
-    return dashContainer;
 }
 
 
