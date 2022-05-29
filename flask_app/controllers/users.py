@@ -125,18 +125,35 @@ def get_user_data():
         data['games'].append(game_data)
     return(data)
 
-# @app.route('/user/update',methods=['POST'])
-# def update():
-#     print('===============')
-#     print("From server update info request:", request.form)
-#     User.update(request.form)
-#     id = request.form['id']
-#     return redirect(f'/user/show/{id}')
+@app.route('/user/update',methods=['POST'])
+def update_user():
+    id = request.form['id']
+    user_in_db = User.get_by_id({"id": id})
+    if not bcrypt.check_password_hash(user_in_db.password, request.form['password']):
+        flash("Invalid Password")
+        print('+============================+')
+        print('(server)Failed updata *password*')
+        print('____________________________________')
+        return "Invalid Password"
+    print('===============')
+    print("From server update info request:", request.form)
+    User.update(request.form)
+    usr = User.get_by_id({"id": id})
+    user_data = {
+        "id" : usr.id,
+        "first_name" :usr.first_name,
+        "last_name" :usr.last_name,
+        'handle' : usr.handle,
+        'email' : usr.email,
+        "created_at" : usr.created_at,
+        "updated_at" : usr.updated_at
+    }
+    return (user_data)
 
-# @app.route('/user/delete/<int:id>')
-# def delete(id):
-#     User.delete(id)
-#     return redirect('/')
+@app.route('/user/delete/<int:id>')
+def del_user(id):
+    User.delete(id)
+    return redirect('/')
 
 # @app.route('/user/update/<int:id>')
 # def update_page(id):

@@ -119,21 +119,22 @@ class User:
         
         return (one_user)
     
+    @classmethod
+    def update(cls,data):
+        print("Update user ID:", id)
+        query = """
+        UPDATE users SET 
+        handle=%(handle)s,
+        first_name=%(first_name)s,
+        last_name=%(last_name)s,
+        email=%(email)s
+        WHERE id =%(id)s;"""
+        return connectToMySQL(database).query_db(query,data)
     # @classmethod
     # def delete(cls, id):
     #     query  = "DELETE FROM users WHERE id = %(id)s;"
     #     return connectToMySQL('user_regdb').query_db(query, {"id": id} )
     
-    # @classmethod
-    # def update(cls,data):
-    #     print("Update user ID:", id)
-    #     query = """
-    #     UPDATE users SET 
-    #     first_name=%(f_name)s,
-    #     last_name=%(l_name)s,
-    #     email=%(e_mail)s
-    #     WHERE id =%(id)s;"""
-    #     return connectToMySQL('user_regdb').query_db(query,data)
 
     
     

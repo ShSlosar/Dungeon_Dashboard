@@ -28,7 +28,9 @@ p,th,td,label,h4,h3,h5,a,label,#user-header{
 }
 input[type=text], 
 input[type=password],
-input[type=time] {
+input[type=time],
+input[type=submit],
+input[type=button] {
     color:  rgba(255, 255, 255, 0.51) ;
     background-color: rgba(0, 0, 0, 0.51);
 }
@@ -49,11 +51,11 @@ input[type=time]::placeholder,
 #card-time-label{
     background-color: rgba(128, 123, 123, 0.31);
 }
-input[type=submit]{
+/* input[type=submit],
+input[type=button]{
     background-color: rgba(0, 0, 0, 0.51);
-    /* box-shadow: 5px 5px 5px 5px rgba(17, 21, 13, 0.64); */
-    color:rgb(211, 213, 210);
-}
+    /* box-shadow: 5px 5px 5px 5px rgba(17, 21, 13, 0.64);
+}*/
 .fa-xmark{
     margin-left: 95%;
     cursor: pointer;

@@ -3,13 +3,19 @@ var mainCard = document.getElementById('main-card');
 var options = document.getElementById('options');
 var accountBtn = document.getElementById('account-btn');
 var dashBbtn = document.getElementById('dashboards-btn');
+var selectedCardBtn = document.getElementById('main-card-btn');
+var deselectedCardBtn = document.getElementById('un-main-card-btn');
+var deleteAccountBtn = document.getElementById('delete-account');
+
 
 function newDash(){
     var dashContainer = document.querySelector("#card-container");
+    selectedCardBtn.id = 'un-main-card-btn';
+    deselectedCardBtn.id = 'main-card-btn';
     mainCard.innerHTML = `
         <form id='card-form' class=" mx-auto p-3" action="/create/game" method="post">
             <div class="">
-                <i onclick="runUserDash()" class="fa-solid fa-xmark"></i>
+                <p onclick="runUserDash()" class="fa-solid fa-xmark"></p>
                 <h5 class=" form-label text-center">Start a new campeign</h5>
             </div>
             <div class="">
@@ -27,6 +33,69 @@ function newDash(){
         mainCard.id = "main-card-2";
 }
 
+function updateUserAccount(e){
+    //e.preventdefault();
+    console.log(page_items.user_data)
+    options.innerHTML = `
+            <h3 id="un-main-card-btn" onclick="runUserDash()" class="">My Dashboards</h3>
+            <h3>|</h3>
+            <h3 id="main-card-btn" onclick="updateUserAccount(event)" class="">Account</h3>
+            `
+    mainCard.innerHTML = `
+        <h5 class="text-center">Edit Account</h5>
+        <form id="user-update-form" class="col-8 d-flex flex-column mx-auto" onsubmit="updateUser(event)">
+            <div>
+                <div class="d-flex">
+                    <div class="  m-3">
+                        <label for="first_name">first name</label>
+                        <input name="first_name" value="${page_items.user_data.first_name}" class="acc-form" type="text">
+                    </div>
+                    <div class=" m-3">
+                        <label for="last_name">last name</label>
+                        <input name="last_name" value="${page_items.user_data.last_name}" class="acc-form" type="text">
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <div class=" m-3">
+                        <label for="email">current email</label>
+                        <input name="email" value="${page_items.user_data.email}" class="acc-form" type="text">
+                    </div>
+                    <div class=" m-3">
+                        <label for="handle">current handle</label>
+                        <input name="handle" value="${page_items.user_data.handle}" class="acc-form" type="text">
+                        <input type="hidden" name="id" value="${page_items.user_data.id}">
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column justify-content-center m-3">
+                <label for="password">password</label>
+                <input name="password" class="" type="password">
+            </div>
+            <div class="d-flex justify-content-evenly m-3">
+                <input class="sub-btn" value="Save" type="submit">
+                <input onclick="updateUserAccount(event)" class="sub-btn" value="Reset" type="button">
+            </div>
+        </form>
+        <div> 
+            <h5 id="delete-account" class=" text-center"><a onclick="deleteAccountConf(event)" class="delete-acc" href="#">Delete Account</a></h5>
+        </div>
+        
+    `
+}
+
+function deleteAccountConf(e){
+    e.preventDefault();
+    document.querySelector(".delete-acc").setAttribute('onclick','updateUserAccount(event)');
+    console.log(document.querySelector(".delete-acc"))
+    mainCard.innerHTML += `
+    <form class="mx-auto" id="del-form" action="/user/delete/${page_items.user_data.id}">
+        <label for="password">password</label>
+        <input name="password" class="" type="password">
+        <input class="sub-btn" value="Delete" type="submit">
+    </form>
+    `
+}
+
 //AJAX: user dashborad load =>
 function runUserDash(){
     console.log('Loading user Dashboard...');
@@ -35,6 +104,7 @@ function runUserDash(){
     .then(data =>{
         console.log(data)
         console.log(data.games[0].game_data.name)
+        globalThis.page_items = data;
         mainCard.id = "main-card";
         function listGames(data){
             html= `
@@ -59,9 +129,9 @@ function runUserDash(){
                     <td>${data.games[i].game_data.created_at}</td>
                     <td>
                         <div class="d-flex justify-content-evenly">
-                            <form id="" onsubmit="openDash(event,this)" class="">
+                            <form id="" action="/game/dashboard/${data.games[i].game_data.id}" class="">
                                 <input type="hidden" name="game_id" value="${data.games[i].game_data.id}">
-                                <input class="sub-btn " value="open" type="submit">
+                                <input class="sub-btn" value="open" type="submit">
                             </form> | 
                             <form id="" onsubmit="deleteDashboard(event,this)" class="">
                                 <input type="hidden" name="game_id" value="${data.games[i].game_data.id}">
@@ -78,6 +148,45 @@ function runUserDash(){
             mainCard.innerHTML = html;
         }
         listGames(data);
+        function optionLinks(){
+            options.innerHTML = `
+            <h3 id="main-card-btn" onclick="runUserDash()" class="">My Dashboards</h3>
+            <h3>|</h3>
+            <h3 id="un-main-card-btn" onclick="updateUserAccount(event)" class="">Account</h3>
+            `
+        }
+        optionLinks()
     })
 }
-//window.onload = runUserDash();
+//========================================
+
+//AJAX: update user =>
+function updateUser(e){
+    e.preventDefault();
+    var editForm =document.getElementById(`user-update-form`)
+    var form = new FormData(editForm);
+    console.log('Clicked: updateUser()', editForm);
+    fetch('http://127.0.0.1:5000/user/update', {method:'Post', body: form})
+    .then(res => res.json())
+    .then(data =>{
+        console.log(data);
+        page_items.user_data = data;
+        console.log(page_items);
+        updateUserAccount();
+    })
+}
+function delAcc(e){
+    e.preventDefault();
+    var delForm =document.getElementById(`del-form`)
+    var form = new FormData(delForm);
+    console.log('Clicked: updateUser()', delForm);
+    fetch('http://127.0.0.1:5000/user/delete', {method:'Post', body: form})
+    .then(res => res.json())
+    .then(data =>{
+        console.log(data);
+        page_items.user_data = data;
+        console.log(page_items);
+        updateUserAccount();
+    })
+}
+window.onload = runUserDash();
