@@ -45,14 +45,21 @@ class Game:
         return connectToMySQL(database).query_db( query, data )
     
     @classmethod
-    def method():
-        pass
+    def get_all(cls):
+        query = """
+        SELECT * FROM games;
+        """
+        games = []
+        results = connectToMySQL(database).query_db( query )
+        for row in results:
+            games.append(cls(row))
+        return games
     
     @classmethod
     def get_by_id(cls,data):
         query  = """
         SELECT * FROM games 
-        JOIN clocks ON clocks.game_id = games.id
+        LEFT JOIN clocks ON clocks.game_id = games.id
         LEFT JOIN characters ON characters.game_id = games.id
         WHERE games.id = %(id)s""";
         query2 = """
@@ -68,6 +75,7 @@ class Game:
         result = connectToMySQL(database).query_db(query, data)
         result2 = connectToMySQL(database).query_db(query2, data)
         result3 = connectToMySQL(database).query_db(query3, data)
+        # if result[0]['games.id']:
         one_game = cls(result[0])
         for row in result:
             if row['characters.id']:
@@ -125,7 +133,7 @@ class Game:
                 one_game.notes.append(note.Note(note_data))
             else:
                 break
-
+        
         clock_data = {
             "id" : result[0]["clocks.id"],
             "day" : result[0]["day"],
@@ -135,17 +143,21 @@ class Game:
             "game_id" : result[0]['game_id'],
             "dm_id" : result[0]["clocks.dm_id"]
         }
-        print('+==============================+')
-        print(f'players in game {one_game.id}:',one_game.players)
-        print('_____________________________________________________')
-        print('+==============================+')
-        print(f'Monsters in game {one_game.id}:',one_game.monsters)
-        print('_____________________________________________________')
         one_game.gclock = clock.Clock( clock_data )
-        print("=======================")
-        print("(model)get one game by ID:")
-        # pprint.pprint(clock_data, sort_dicts=False)
-        pprint.pprint(one_game, sort_dicts=False)
-        print('______________________________________')
+        # print('+==============================+')
+        # print(f'players in game {one_game.id}:',one_game.players)
+        # print('_____________________________________________________')
+        # print('+==============================+')
+        # print(f'Monsters in game {one_game.id}:',one_game.monsters)
+        # print('_____________________________________________________')
+        # print("=======================")
+        # print("(model)get one game by ID:")
+        # # pprint.pprint(clock_data, sort_dicts=False)
+        # pprint.pprint(one_game, sort_dicts=False)
+        # print('______________________________________')
         return one_game
 
+    @classmethod
+    def delete(cls,data):
+        query  = "DELETE FROM games WHERE id = %(id)s;"
+        return connectToMySQL(database).query_db(query,data)

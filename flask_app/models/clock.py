@@ -60,3 +60,8 @@ class Clock:
         result = connectToMySQL(database).query_db(query,data)
         new_clock = cls(result[0])
         return new_clock
+    
+    @classmethod
+    def delete(cls, data):
+        query  = "DELETE FROM clocks WHERE game_id = %(id)s;"
+        return connectToMySQL(database).query_db(query,data)

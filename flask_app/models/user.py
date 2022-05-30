@@ -107,11 +107,11 @@ class User:
     def get_with_data(cls,data):
         query  = """
         SELECT * FROM users 
-        JOIN games ON
+        LEFT JOIN games ON
         users.id = games.dm_id
         WHERE users.id = %(id)s""";
         result = connectToMySQL(database).query_db(query, data)
-        pprint.pprint(result)
+        # pprint.pprint(result)
         one_user = cls(result[0])
         for row in result:
             one_user.games.append(game.Game.get_by_id({"id":row['games.id']}))
@@ -130,10 +130,11 @@ class User:
         email=%(email)s
         WHERE id =%(id)s;"""
         return connectToMySQL(database).query_db(query,data)
-    # @classmethod
-    # def delete(cls, id):
-    #     query  = "DELETE FROM users WHERE id = %(id)s;"
-    #     return connectToMySQL('user_regdb').query_db(query, {"id": id} )
+    
+    @classmethod
+    def delete(cls, data):
+        query  = "DELETE FROM users WHERE id = %(id)s;"
+        return connectToMySQL(database).query_db(query,data)
     
 
     

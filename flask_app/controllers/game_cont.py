@@ -169,65 +169,14 @@ def run_game():
     # pprint.pprint(session['monsters'], sort_dicts=False)
     return (data)
 
-# @app.route('/game/players')
-# def get_players_in_game():
-#     current_game = Game.get_by_id({'id' : session['game_id']})
-#     data ={
-#         'players' :[]
-#     }
-#     for players in current_game.players:
-#         player = {
-#             "id" : players.id,
-#             "lvl" : players.lvl,
-#             "name" : players.name,
-#             "race" : players.race,
-#             "class_type" : players.class_type,
-#             "alignment" : players.alignment,
-#             "hp" : players.hp,
-#             "ac" : players.ac,
-#             "speed" : players.speed,
-#             "str" : players.str,
-#             "dex" : players.dex,
-#             "intel" : players.intel,
-#             "wis" : players.wis,
-#             "const" : players.const,
-#             "chars" : players.chars,
-#             "creator_id" : players.creator_id,
-#             "dm_id" : players.dm_id,
-#             "game_id" : players.game_id,
-#             "created_at" : players.created_at,
-#             "updated_at" : players.updated_at
-#         }
-#         data['players'].append(player)
-#     # print('+=========================================+')
-#     # print('(server--game_cont--) players in game:')
-#     # pprint.pprint(data)
-#     # print('__________________________________________________________')
-#     return(data)
-
-
-# @app.route('/game/monsters')
-# def get_monsters_in_game():
-#     current_game = Game.get_by_id({'id' : session['game_id']})
-#     data ={
-#         'monsters' :[]
-#     }
-#     for monsters in current_game.monsters:
-#         r = requests.get(f"https://www.dnd5eapi.co/api/monsters/{monsters.indx}")
-#         data['monsters'].append(r.json())
-#     # print('+=========================================+')
-#     # print('(server--game_cont--) monsters in game:')
-#     # pprint.pprint(data)
-#     # print('__________________________________________________________')
-#     return(data)
-
-    # for monsters in current_game.monsters:
-    #     monster = {
-    #         "id" : monsters.id,
-    #         "index" : monsters.index,
-    #         "dm_id" : monsters.dm_id,
-    #         "game_id" : monsters.game_id,
-    #         "created_at" : monsters.created_at,
-    #         "updated_at" : monsters.updated_at
-    #     }
-        
+@app.route('/delete/dashboard/<int:id>')
+def del_dash(id):
+    if 'user_id' not in session:
+        print('=======================')
+        print('(server) User not in session')
+        print('______________________________________')
+        return redirect('/')
+    data = {"id":id}
+    Clock.delete(data)
+    Game.delete(data)
+    return (data)

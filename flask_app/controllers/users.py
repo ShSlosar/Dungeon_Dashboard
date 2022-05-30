@@ -1,6 +1,7 @@
 from flask_app import app
 from flask import render_template,redirect,request,session,flash
 from flask_app.models.user import User
+from flask_app.models.game import Game
 from flask_app.controllers import monster_cont, clock_cont,character_cont,note_cont
 import pprint
 from datetime import datetime,time
@@ -24,6 +25,8 @@ def show():
     data = {
         "id" : session['user_id']
     }
+    if 'game_id' in session:
+        session.clear('game_id')
     print('+==================+')
     print('(server)rendering template: dashboard.html')
     print('______________________________________')
@@ -89,10 +92,7 @@ def logout():
 
 @app.route('/user/dash')
 def get_user_data():
-    res = User.get_with_data({"id":session['user_id']})
     usr = User.get_by_id({"id": session['user_id']})
-    print('Results:')
-    pprint.pprint(res)
     data ={
         'user_data' :{
             "id" : usr.id,
@@ -105,25 +105,37 @@ def get_user_data():
         },
         'games' : []
     }
-    for game in res.games:
-        time24 = datetime.strptime(str(game.gclock.time_active) , "%H:%M:%S")
-        time12 = time24.strftime("%I:%M:%S %p")
-        timeVal = time24.strftime("%H:%M:%S")
-        date_t =  game.created_at.strftime("%a %d %b %Y")
-        print('CreatedAT:::', date_t)
-        game_data = {
-            'game_data' : {
-                'name' : game.name,
-                'time_active' : time12,
-                'day' : game.gclock.day,
-                'id' : game.id,
-                'created_at' : date_t
-            },
-            'players' :len(game.players),
-            'monsters' :len(game.monsters)
-        }
-        data['games'].append(game_data)
-    return(data)
+    temp = []
+    games = Game.get_all()
+    for game in games:
+        if session['user_id'] == game.dm_id:
+            temp.append(game.id)
+            
+    if len(temp)>0:
+        res = User.get_with_data({"id":session['user_id']})
+        print('Results:')
+        pprint.pprint(res)
+        for game in res.games:
+            time24 = datetime.strptime(str(game.gclock.time_active) , "%H:%M:%S")
+            time12 = time24.strftime("%I:%M:%S %p")
+            timeVal = time24.strftime("%H:%M:%S")
+            date_t =  game.created_at.strftime("%a %d %b %Y")
+            print('CreatedAT:::', date_t)
+            game_data = {
+                'game_data' : {
+                    'name' : game.name,
+                    'time_active' : time12,
+                    'day' : game.gclock.day,
+                    'id' : game.id,
+                    'created_at' : date_t
+                },
+                'players' :len(game.players),
+                'monsters' :len(game.monsters)
+            }
+            data['games'].append(game_data)
+        return(data)
+    else:
+        return(data)
 
 @app.route('/user/update',methods=['POST'])
 def update_user():
@@ -150,9 +162,26 @@ def update_user():
     }
     return (user_data)
 
-@app.route('/user/delete/<int:id>')
-def del_user(id):
-    User.delete(id)
+@app.route('/user/delete',methods=['POST'])
+def del_user():
+    id= request.form['id']
+    print(id)
+    print(session['user_id'])
+    if 'user_id' not in session:
+        print('=======================')
+        print('(server) User not in session')
+        print('______________________________________')
+        return redirect('/')
+    user_in_db = User.get_by_id({"id": id})
+    if not bcrypt.check_password_hash(user_in_db.password, request.form['password']):
+        flash("Invalid Password")
+        print('+============================+')
+        print('(server)Failed updata *password*')
+        print('____________________________________')
+        return "invalid Password"
+    print(f'======DELETE USER: {id}=========')
+    session.clear()
+    User.delete({"id":id})
     return redirect('/')
 
 # @app.route('/user/update/<int:id>')

@@ -88,12 +88,87 @@ function deleteAccountConf(e){
     document.querySelector(".delete-acc").setAttribute('onclick','updateUserAccount(event)');
     console.log(document.querySelector(".delete-acc"))
     mainCard.innerHTML += `
-    <form class="mx-auto" id="del-form" action="/user/delete/${page_items.user_data.id}">
+    <form class="mx-auto" id="del-form" action="/user/delete" method="post">
+        <input type="hidden" name="id" value="${page_items.user_data.id}">
         <label for="password">password</label>
         <input name="password" class="" type="password">
         <input class="sub-btn" value="Delete" type="submit">
     </form>
     `
+}
+
+function optionLinks(){
+    options.innerHTML = `
+    <h3 id="main-card-btn" onclick="runUserDash()" class="">My Dashboards</h3>
+    <h3>|</h3>
+    <h3 id="un-main-card-btn" onclick="updateUserAccount(event)" class="">Account</h3>
+    `
+}
+
+function listGames(data){
+    e.preventDefault();
+    html= `
+    <h5 class="text-center"><a onclick="newDash(this)" class="text-light" href="#">Start a New Dashboard</a></h5>
+    <table id="games-table" class="table text-center">
+        <thead>
+            <th>Name</th>
+            <th>Game Time</th>
+            <th>Players</th>
+            <th>Monsters</th>
+            <th>Created</th>
+            <th>Options</th>
+        </thead>
+    `
+    if(data.games.length>0){
+        for(i=0;i<data.games.length;i++){
+            html += `
+            <tbody>
+                <td>${data.games[i].game_data.name}</td>
+                <td>${data.games[i].game_data.time_active}</td>
+                <td>${data.games[i].players}</td>
+                <td>${data.games[i].monsters}</td>
+                <td>${data.games[i].game_data.created_at}</td>
+                <td>
+                    <div class="d-flex justify-content-evenly">
+                        <form id="" action="/game/dashboard/${data.games[i].game_data.id}" class="">
+                            <input type="hidden" name="game_id" value="${data.games[i].game_data.id}">
+                            <input class="sub-btn" value="open" type="submit">
+                        </form> | 
+                        <form id="del-dash" onsubmit="removeDashFromItems(event,element)" class="">
+                            <input type="hidden" name="game_id" value="${data.games[i].game_data.id}">
+                            <input class="sub-btn " value="delete" type="submit">
+                        </form>
+                    </div>
+                </td>
+            </tbody>
+            `
+        }
+        html+= `
+        </table>
+        `
+    }
+    else{
+        html+= `
+        </table>
+        `
+        html += `
+        <h3 class="text-center">No games yet...</h3>
+        `
+    }
+    mainCard.innerHTML = html;
+}
+
+function removeDashFromItems(e,element){
+    e.preventDefault();
+    console.log(element.game_id.value);
+    for(i=0; i<page_items.game_data.length; i++){
+        // console.log(game_items.players[i].id);
+        if(element.game_id.value == page_items.game_data[i].id){
+            page_items.game_data.splice(i,1);
+        }
+    }
+    deleteDash(e,element.game_id.value);
+    listGames(e,page_items);
 }
 
 //AJAX: user dashborad load =>
@@ -103,7 +178,6 @@ function runUserDash(){
     .then(res => res.json())
     .then(data =>{
         console.log(data)
-        console.log(data.games[0].game_data.name)
         globalThis.page_items = data;
         mainCard.id = "main-card";
         function listGames(data){
@@ -119,32 +193,42 @@ function runUserDash(){
                     <th>Options</th>
                 </thead>
             `
-            for(i=0;i<data.games.length;i++){
-                html += `
-                <tbody>
-                    <td>${data.games[i].game_data.name}</td>
-                    <td>${data.games[i].game_data.time_active}</td>
-                    <td>${data.games[i].players}</td>
-                    <td>${data.games[i].monsters}</td>
-                    <td>${data.games[i].game_data.created_at}</td>
-                    <td>
-                        <div class="d-flex justify-content-evenly">
-                            <form id="" action="/game/dashboard/${data.games[i].game_data.id}" class="">
-                                <input type="hidden" name="game_id" value="${data.games[i].game_data.id}">
-                                <input class="sub-btn" value="open" type="submit">
-                            </form> | 
-                            <form id="" onsubmit="deleteDashboard(event,this)" class="">
-                                <input type="hidden" name="game_id" value="${data.games[i].game_data.id}">
-                                <input class="sub-btn " value="delete" type="submit">
-                            </form>
-                        </div>
-                    </td>
-                </tbody>
+            if(data.games.length>0){
+                for(i=0;i<data.games.length;i++){
+                    html += `
+                    <tbody>
+                        <td>${data.games[i].game_data.name}</td>
+                        <td>${data.games[i].game_data.time_active}</td>
+                        <td>${data.games[i].players}</td>
+                        <td>${data.games[i].monsters}</td>
+                        <td>${data.games[i].game_data.created_at}</td>
+                        <td>
+                            <div class="d-flex justify-content-evenly">
+                                <form id="" action="/game/dashboard/${data.games[i].game_data.id}" class="">
+                                    <input type="hidden" name="game_id" value="${data.games[i].game_data.id}">
+                                    <input class="sub-btn" value="open" type="submit">
+                                </form> | 
+                                <form id="del-dash" onsubmit="removeDashFromItems(event,element)" class="">
+                                    <input type="hidden" name="game_id" value="${data.games[i].game_data.id}">
+                                    <input class="sub-btn " value="delete" type="submit">
+                                </form>
+                            </div>
+                        </td>
+                    </tbody>
+                    `
+                }
+                html+= `
+                </table>
                 `
             }
-            html+= `
-            </table>
-            `
+            else{
+                html+= `
+                </table>
+                `
+                html += `
+                <h3 class="text-center">No games yet...</h3>
+                `
+            }
             mainCard.innerHTML = html;
         }
         listGames(data);
@@ -176,17 +260,17 @@ function updateUser(e){
     })
 }
 function delAcc(e){
-    e.preventDefault();
+    // e.preventDefault();
     var delForm =document.getElementById(`del-form`)
     var form = new FormData(delForm);
     console.log('Clicked: updateUser()', delForm);
     fetch('http://127.0.0.1:5000/user/delete', {method:'Post', body: form})
+}
+function deleteDash(e,data){
+    fetch(`http://127.0.0.1:5000/delete/dashboard/${data}`)
     .then(res => res.json())
     .then(data =>{
-        console.log(data);
-        page_items.user_data = data;
-        console.log(page_items);
-        updateUserAccount();
+        console.log(data)
     })
 }
 window.onload = runUserDash();

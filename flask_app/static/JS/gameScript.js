@@ -360,21 +360,23 @@ function defaultCenterCard(e){
 function noteEditForm(e,element){
     e.preventDefault();
     console.log(element.note_id.value)
-    for(i=0; i<element.note_id.value; i++){
+    for(i=0; i<game_items.notes.length; i++){
         // console.log(game_items.players[i].id);
         if(element.note_id.value == game_items.notes[i].id){
             data = game_items.notes[i];
         }
     }
     html = `
-        <h2 class="text-center">notes</h2>
-        <div class="d-flex justify-content-evenly ">
+        <h2 class="title-txt text-center border-bottom border-3 border-dark mb-4 pb-4">Notes</h2>
+        <div class="d-flex justify-content-evenly align-items-center">
             <form id="update-note-form" onsubmit="updateNote(event)" class="d-flex flex-column p-2">
                 <input name="title" type="text" value="${data.title}">
                 <textarea class="mt-2" placeholder="Content..." name="content" id="" cols="30" rows="10">${data.content}</textarea>
-                <input class="sub-btn mt-2" type="submit" value="save note">
-                <input name="id" type="hidden" value="${data.id}">
-                <input class="sub-btn" onclick="defaultCenterCard(event)" type="button" value="Back">
+                <div class="d-flex justify-content-evenly">
+                    <input class="sub-btn mt-2" type="submit" value="save note">
+                    <input name="id" type="hidden" value="${data.id}">
+                    <input class="sub-btn mt-2" onclick="defaultCenterCard(event)" type="button" value="Back">
+                </div>
             </form>
             <div id="note-table" class="notes-table p-2 w-50">
                 <table class="table text-center note-tbl">
