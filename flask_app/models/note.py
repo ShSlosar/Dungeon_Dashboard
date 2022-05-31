@@ -48,3 +48,8 @@ class Note:
         query  = "DELETE FROM notes WHERE id = %(id)s;"
         return connectToMySQL(database).query_db(query, data)
     
+    @classmethod
+    def delete_in_game(cls,data):
+        query  = "DELETE FROM notes WHERE game_id = %(id)s;"
+        return connectToMySQL(database).query_db(query, data)
+    

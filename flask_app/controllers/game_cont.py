@@ -5,6 +5,7 @@ from flask_app.models.user import User
 from flask_app.models.game import Game
 from flask_app.models.clock import Clock
 from flask_app.models.monster import Monster
+from flask_app.models.character import Character
 from flask_app.models.note import Note
 from flask_app.controllers import monster_cont, clock_cont, users,character_cont,note_cont
 from datetime import datetime, timedelta
@@ -177,6 +178,9 @@ def del_dash(id):
         print('______________________________________')
         return redirect('/')
     data = {"id":id}
+    Note.delete_in_game(data)
+    Character.delete_in_game(data)
+    Monster.delete_in_game(data)
     Clock.delete(data)
     Game.delete(data)
     return (data)

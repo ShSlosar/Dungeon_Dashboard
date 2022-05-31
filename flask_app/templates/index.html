@@ -20,7 +20,7 @@
             {% endfor %}
         {% endif %}
         {% endwith %}
-        <form id="L_and_R_card" class="position-absolute top-50 start-50 translate-middle border rounded border-3 border-dark col-4 text-light p-4" action="/create_user" method="POST">
+        <form id="registration-card" class="position-absolute top-50 start-50 translate-middle border rounded border-3 border-dark col-4 text-light p-4" action="/create_user" method="POST">
                 
                 <img src="static/Assets/dunDashLogo.png" alt="logo">
             <!-- <i class="fa-solid fa-dice-d20"></i> -->
@@ -47,7 +47,7 @@
             <div class="d-flex align-items-center">
                 <i class=" mx-3 fa-2xl fa-solid fa-beat fa-user"></i>
                 <input class="mx-auto my-2 btn btn-primary text-center border-2 border-dark" type="submit" value="Register">
-                <a onclick="loginCard(this)" href="#" class="text-light">Or click here to Login!</a>
+                <a onclick="loginCard(this)" href="#" class="text-light">Click here to Login!</a>
             </div>
         </form>
     </div>

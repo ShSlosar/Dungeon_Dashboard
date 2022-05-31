@@ -161,3 +161,5 @@ class Game:
     def delete(cls,data):
         query  = "DELETE FROM games WHERE id = %(id)s;"
         return connectToMySQL(database).query_db(query,data)
+    
+    

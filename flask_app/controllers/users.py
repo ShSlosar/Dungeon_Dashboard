@@ -26,7 +26,7 @@ def show():
         "id" : session['user_id']
     }
     if 'game_id' in session:
-        session.clear('game_id')
+        session.pop('game_id',None)
     print('+==================+')
     print('(server)rendering template: dashboard.html')
     print('______________________________________')

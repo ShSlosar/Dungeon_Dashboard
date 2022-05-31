@@ -63,6 +63,11 @@ class Character:
         return connectToMySQL(database).query_db(query, data)
     
     @classmethod
+    def delete_in_game(cls,data):
+        query  = "DELETE FROM characters WHERE game_id = %(id)s;"
+        return connectToMySQL(database).query_db(query, data)
+    
+    @classmethod
     def update(cls,data):
         query= """
         UPDATE characters SET

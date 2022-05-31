@@ -102,10 +102,9 @@ function displayMods(element){
 //-------------------------------------------------------------------------------------------
 
 // Add To initiative Card_____________________________________________________________________
-function addToIni(e,element){                       //Left off here: find a way to add to INI and save? to game new DB table?
+function addPtoIni(e,element){                       //Left off here: find a way to add to INI and save? to game new DB table?
     e.preventDefault();
     clearIniBtn.type = "button";
-    if(element.player_id){
         for(i=0; i<game_items.players.length; i++){
             // console.log(game_items.players[i].id);
             if(element.player_id.value == game_items.players[i].id){
@@ -118,21 +117,23 @@ function addToIni(e,element){                       //Left off here: find a way 
                     <p class="col-4"><strong>HP:</strong> <input class="w-50" type="number" value="${data.hp}"></p>
             </div>
         `
-    }
-    else{
-        for(i=0; i<game_items.monsters.length; i++){
-            // console.log(game_items.players[i].id);
-            if(element.monster_id.value == game_items.monsters[i].id){
-                data = game_items.monsters[i];
-            }
+}
+
+function addMtoIni(e,element){
+    e.preventDefault();
+    clearIniBtn.type = "button";
+    for(i=0; i<game_items.monsters.length; i++){
+        // console.log(game_items.players[i].id);
+        if(element.monster_id.value == game_items.monsters[i].id){
+            data = game_items.monsters[i];
         }
-        initiativeCard.innerHTML += `
-            <div class="ini mx-1 w-25 border-end border-2 border-dark d-flex justify-content-evenly align-items-center">
-                    <p class="text-center col-4 border-end border-1 border-secondary"><strong>${data.name}</strong></p>
-                    <p class="col-4"><strong>HP:</strong> <input class="w-50" type="number" value="${data.hit_points}"></p>
-            </div>
-        `
     }
+    initiativeCard.innerHTML += `
+        <div class="ini mx-1 w-25 border-end border-2 border-dark d-flex justify-content-evenly align-items-center">
+                <p class="text-center col-4 border-end border-1 border-secondary"><strong>${data.name}</strong></p>
+                <p class="col-4"><strong>HP:</strong> <input class="w-50" type="number" value="${data.hit_points}"></p>
+        </div>
+    `
 }
 //-----------------------------------------------------------------------------------------------------------------------
 function clearIniCards(e,element){
@@ -186,7 +187,7 @@ function addMonsterToGame(e,element){
 //Display New Character Form in Center Card______________________________________________________
 function displayPlayerForm(element){
     centerCard.innerHTML = `
-    <i onclick="defaultCenterCard(this)" class="fa-solid fa-xmark"></i>
+    <p onclick="defaultCenterCard(this)" class="fa-solid fa-xmark"></p>
     <h1 class="text-center">Create New Character</h1>
     <div class="d-flex justify-content-between">
         <form onsubmit="addPlayer(event)" class="mx-auto" id="add-player-form">
@@ -198,7 +199,7 @@ function displayPlayerForm(element){
                 <input class="" type="text" name="alignment" placeholder="alignment">
                 <input class="" type="text" name="class_type" placeholder="class">
             </div>
-            <table class="table text-center">
+            <table class="table text-center player-edit">
                 <thead>
                     <th>AC</th>
                     <th>HP</th>
@@ -206,13 +207,13 @@ function displayPlayerForm(element){
                     <th>LVL</th>
                 </thead>
                 <tbody>
-                    <td><input class="w-50" min="1" max="30" type="number" name="ac"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="hp"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="speed"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="lvl"></td>
+                    <td><input class="w-50" min="1" type="number" name="ac"></td>
+                    <td><input class="w-50" min="1" type="number" name="hp"></td>
+                    <td><input class="w-50" min="1" type="number" name="speed"></td>
+                    <td><input class="w-50" min="1" type="number" name="lvl"></td>
                 </tbody>
             </table>
-            <table class="table text-center">
+            <table class="table text-center player-edit">
                 <thead>
                     <th>str</th>
                     <th>dex</th>
@@ -251,7 +252,7 @@ function displayPlayerEditForm(e,element){
     }
     console.log(data);
     centerCard.innerHTML = `
-    <i onclick="defaultCenterCard(this)" class="fa-solid fa-xmark"></i>
+    <p onclick="defaultCenterCard(this)" class="fa-solid fa-xmark"></p>
     <h1 class="text-center">Edit Character</h1>
     <div class="d-flex justify-content-between">
         <form onsubmit="updatePlayer(event)" class="mx-auto" id="edit-player-form">
@@ -263,7 +264,7 @@ function displayPlayerEditForm(e,element){
                 <input class="" type="text" name="alignment" value="${data.alignment}">
                 <input class="" type="text" name="class_type" value="${data.class_type}">
             </div>
-            <table class="table text-center">
+            <table class="table text-center player-edit">
                 <thead>
                     <th>AC</th>
                     <th>HP</th>
@@ -271,13 +272,13 @@ function displayPlayerEditForm(e,element){
                     <th>LVL</th>
                 </thead>
                 <tbody>
-                    <td><input class="w-50" min="1" max="30" type="number" name="ac" value="${data.ac}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="hp" value="${data.hp}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="speed" value="${data.speed}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="lvl"value="${data.lvl}"></td>
+                    <td><input class="w-50" min="1" type="number" name="ac" value="${data.ac}"></td>
+                    <td><input class="w-50" min="1" type="number" name="hp" value="${data.hp}"></td>
+                    <td><input class="w-50" min="1" type="number" name="speed" value="${data.speed}"></td>
+                    <td><input class="w-50" min="1" type="number" name="lvl"value="${data.lvl}"></td>
                 </tbody>
             </table>
-            <table class="table text-center">
+            <table class="table text-center player-edit">
                 <thead>
                     <th>str</th>
                     <th>dex</th>
@@ -303,7 +304,7 @@ function displayPlayerEditForm(e,element){
                 <input class="sub-btn" type="submit" value="Submit">
                 <form id="" onsubmit="displayPlayerEditForm(event,this)" class="">
                     <input type="hidden" name="player_id" value="${data.id}">
-                    <input class="sub-btn" value="Edit" type="submit">
+                    <input class="sub-btn" value="Reset" type="submit">
                 </form>
             </div>
         </form>
@@ -315,7 +316,7 @@ function displayPlayerEditForm(e,element){
 function defaultCenterCard(e){
     // e.preventDefault();
     html = `
-        <h2 class="text-center border-bottom border-3 border-dark mb-4 pb-4">notes</h2>
+        <h2 class="title-txt text-center border-bottom border-3 border-dark mb-4 pb-4">Notes</h2>
         <div class="d-flex justify-content-evenly align-items-center">
             <form id="note-form" onsubmit="saveNote(event)" class="d-flex flex-column p-2">
                 <input name="title" type="text" placeholder="Title">
@@ -507,7 +508,7 @@ function displayPlayers(e){
                             <input class="sub-btn " value="View sheet" type="submit">
                         </form>
                     </div>
-                    <form id="" onsubmit="addToIni(event,this)" class=" ">
+                    <form id="" onsubmit="addPtoIni(event,this)" class=" ">
                         <input type="hidden" name="player_id" value="${game_items.players[i].id}">
                         <input class="sub-btn" value="Add to inititave" type="submit">
                     </form>
@@ -632,7 +633,7 @@ function displayMonsters(e){
                             <input class="sub-btn" value="View sheet" type="submit">
                         </form>
                     </div>
-                    <form id="" onsubmit="addToIni(event,this)" class=" ">
+                    <form id="" onsubmit="addMtoIni(event,this)" class=" ">
                         <input type="hidden" name="monster_id" value="${game_items.monsters[i].id}">
                         <input class="sub-btn" value="Add to inititave" type="submit">
                     </form>
@@ -805,7 +806,7 @@ function runGame(e){
                                 <input type="hidden" name="player_id" value="${data.players[i].id}">
                                 <input class="sub-btn " value="View sheet" type="submit">
                             </form>
-                            <form id="" onsubmit="addToIni(event,this)" class="">
+                            <form id="" onsubmit="addPtoIni(event,this)" class="">
                                 <input type="hidden" name="player_id" value="${data.players[i].id}">
                                 <input class="sub-btn" value="Add to inititave" type="submit">
                             </form>
@@ -868,7 +869,7 @@ function runGame(e){
                                         <input class="sub-btn " value="View sheet" type="submit">
                                     </form>
                                 </div>
-                                <form id="" onsubmit="addToIni(event,this)" class=" ">
+                                <form id="" onsubmit="addMtoIni(event,this)" class=" ">
                                     <input type="hidden" name="monster_id" value="${data.monsters[i].id}">
                                     <input class="sub-btn" value="Add to inititave" type="submit">
                                 </form>
@@ -995,38 +996,40 @@ function inGameMonsterCard(e,element){
                 console.log('looping...',num)
                 actions.innerHTML +=
                 `<table class="table">
-                <p><strong>${data.actions[parseInt(num)].name}</strong></p>
-                <thead>
-                <th>Description</th>
-                </thead>
-                <tbody>
-                <td>${data.actions[parseInt(num)].desc}</td>
-                </tbody>
-                </table>`
+                    <p><strong>${data.actions[parseInt(num)].name}</strong></p>
+                    <thead>
+                        <th>Description</th>
+                    </thead>
+                    <tbody>
+                        <td>${data.actions[parseInt(num)].desc}</td>
+                    </tbody>
+                </table>
+                `
             }
+            actions.innerHTML += `
+                <form id="" onsubmit="removeMonsterFromItems(event, this)" class="d-flex justify-content-center">
+                    <input type="hidden" name="monster_id" value="${data.id}">
+                    <input class="sub-btn " value="remove" type="submit">
+                </form>
+            `
         }
         //-----------------------------------------------------------------------------------------
         //Monster stats____________________________________________________________________________
         monsters.innerHTML = 
-        `<i onclick="displayMonsters(event)" class="fa-solid fa-xmark"></i>
+        `<p onclick="displayMonsters(event)" class="fa-solid fa-xmark"></p>
         <h4><strong>${data.name}</strong></h4>
-        <form id="" onsubmit="removeMonsterFromItems(event, this)" class=" ">
-            <input type="hidden" name="monster_id" value="${data.id}">
-            <input class="sub-btn " value="remove" type="submit">
-        </form>
-        </form>
         <div>
-        <p><strong>alignment:</strong> ${data.alignment}</p>
-        <p><strong>Race:</strong> ${data.type}</p>
+            <p><strong>alignment:</strong> ${data.alignment}</p>
+            <p><strong>Race:</strong> ${data.type}</p>
         </div>
         <table class="mx-auto table w-75 text-center">
-        <thead>
-        <th>HP</th>
-        <th>AC</th>
-        <th>Speed</th>
-        <th>Initiative</th>
-        </thead>
-        <tbody>
+            <thead>
+                <th>HP</th>
+                <th>AC</th>
+                <th>Speed</th>
+                <th>Initiative</th>
+            </thead>
+            <tbody>
                 <td>${data.hit_points}</td>
                 <td>${data.armor_class}</td>
                 <td>${data.speed.walk}</td>
@@ -1127,7 +1130,7 @@ function displayPlayerCard(e){
             var charMod = modifiers(data.chars);
             var wisMod = modifiers(data.wis);
             playerCardDiv.innerHTML = 
-                `<i onclick="displayPlayers(event)" class="fa-solid fa-xmark"></i>
+                `<p onclick="displayPlayers(event)" class="fa-solid fa-xmark"></p>
                 <h4><strong>${data.name}</strong></h4>
                 <div>
                     <p><strong>alignment:</strong> ${data.alignment}</p>
@@ -1240,7 +1243,7 @@ function monsterSearch(e){
         //-----------------------------------------------------------------------------------------
         //Monster stats____________________________________________________________________________
         monsters.innerHTML = 
-        `<i onclick="displayMonsters(event)" class="fa-solid fa-xmark"></i>
+        `<p onclick="displayMonsters(event)" class="fa-solid fa-xmark"></p>
         <h4><strong>${data.name}</strong></h4>
         <form id="" onsubmit="addMonsterToGame(event,this)" class=" ">
             <input type="hidden" name="monster_indx" value="${data.index}">
@@ -1312,7 +1315,7 @@ function monsterSearch2(e){
         // Monster Search Results_______________________________________________________________________________________________
         function list_res(){ 
             monsters.innerHTML = `
-            <i onclick="displayMonsters(event)" class="fa-solid fa-xmark"></i>
+            <p onclick="displayMonsters(event)" class="fa-solid fa-xmark"></p>
             <p  class="border-bottom border-2 border-dark"><strong>Displaying ${data.results.length} results for challenge rating ${rating}:</strong></p>`
             for(var i=0; i<data.results.length; i++){
                 console.log(data.results[i].index);

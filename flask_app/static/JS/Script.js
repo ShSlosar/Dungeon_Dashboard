@@ -3,7 +3,7 @@
 function loginCard(){
     var card = document.querySelector("#container")
     card.innerHTML = `
-    <form id="L_and_R_card" class="position-absolute top-50 start-50 translate-middle border rounded border-3 border-dark col-4 text-light p-4" action="/login" method="POST">
+    <form id="login-card" class="position-absolute top-50 start-50 translate-middle border rounded border-3 border-dark col-4 text-light p-4" action="/login" method="POST">
         <img src="static/Assets/dunDashLogo.png" alt="logo">
         <i class="fa-2xl fa-solid fa-dice-d20 fa-bounce fa-spin"></i>
         <div class=" my-2">
@@ -15,15 +15,15 @@ function loginCard(){
         <div class="d-flex align-items-center">
             <i class=" mx-3 fa-2xl fa-solid fa-beat fa-user"></i>
             <input class="mx-auto my-2 btn btn-primary text-center border-2 border-dark" type="submit" value="Login">
-            <a onclick="regiCard(this)" href="#" class="text-light">Or click here to Register!</a>
+            <a onclick="regiCard(this)" href="#" class="text-light">Click here to Register!</a>
         </div>
     </form> `
 return card
 }
 function regiCard(){
-    var card = document.querySelector("#L_and_R_card")
+    var card = document.querySelector("#login-card")
     card.innerHTML = `
-    <form id="L_and_R_card" class="position-absolute top-50 start-50 translate-middle border rounded border-3 border-dark col-4 text-light p-4" action="/create_user" method="POST">
+    <form id="registration-card" class="position-absolute top-50 start-50 translate-middle border rounded border-3 border-dark col-4 text-light p-4" action="/create_user" method="POST">
         <img src="static/Assets/dunDashLogo.png" alt="logo">
         <i class="fa-2xl fa-solid fa-dice-d20 fa-bounce fa-spin"></i>
         <div class=" my-2">
@@ -49,11 +49,16 @@ function regiCard(){
         <div class="d-flex align-items-center">
             <i class=" mx-3 fa-2xl fa-solid fa-beat fa-user"></i>
             <input class="mx-auto my-2 btn btn-primary text-center border-2 border-dark" type="submit" value="Register">
-            <a onclick="loginCard(this)" href="#" class="text-light">Or click here to Login!</a>
+            <a onclick="loginCard(this)" href="#" class="text-light">Click here to Login!</a>
         </div>
     </form>`
 return card
 }
+
+//AJAX: Validations for Login/Registration =>
+
+
+
 
 
 // AJAX Functions 

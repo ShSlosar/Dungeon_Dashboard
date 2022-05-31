@@ -24,6 +24,9 @@ p,th,td,label,h4,h5,a{
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.51);
 }
+.player-edit{
+    background-color: rgba(0, 0, 0, 0.51);
+}
 .game-card,
 .game-card-main,
 #clocks-card,
@@ -61,14 +64,10 @@ input[type=submit],
 input[type=button]{
     border: none;
 }
+a:hover{
+    color: rgba(218, 196, 0, 0.595);
+}
 
-/* .text-button{
-    position: fixed;
-} */
-/* textarea{
-    color:  rgb(255, 255, 255) ;
-    background-color: rgba(85, 79, 26, 0.51);
-} */
 #monster-result-card{
     overflow: auto;
 }

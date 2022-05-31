@@ -44,3 +44,8 @@ class Monster:
     def delete(cls,data):
         query  = "DELETE FROM npcs WHERE id = %(id)s;"
         return connectToMySQL(database).query_db(query, data )
+    
+    @classmethod
+    def delete_in_game(cls,data):
+        query  = "DELETE FROM npcs WHERE game_id = %(id)s;"
+        return connectToMySQL(database).query_db(query, data)
