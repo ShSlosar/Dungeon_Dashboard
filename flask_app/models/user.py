@@ -28,35 +28,39 @@ class User:
         print('+==========================+')
         print('(model) Validating new user...')
         print('_______________________________________')
+        validation_messages = {
+        }
         is_valid = True
         if not EMAIL_REGEX.match(data['email']):
-            flash("Email invalid")
+            validation_messages["email_re"] = "*Email invalid.*"
             is_valid = False
         if User.get_by_email(data):
-            flash("Email already taken.", "regi")
+            validation_messages["db_email"] = "*Email already taken.*"
             is_valid=False
         if len(data['handle']) < 3:
-            flash("User Name must be more than 3 characters", "regi")
+            validation_messages["handle_len"] = "*User Name must be more than 3 characters.*"
             is_valid = False
         if len(data['first_name']) < 2:
-            flash("Name must be more than 2 characters", "regi")
+            validation_messages["fname_len"] = "*Name must be more than 2 characters.*"
             is_valid = False
         if len(data['last_name']) < 2:
-            flash("Name must be more than 2 characters", "regi")
+            validation_messages["lname_len"] = "*Name must be more than 2 characters.*"
             is_valid = False
         if not PASSWORD_REGEX.match(data['password']):
-            flash("Password must contain at least one uppercase, one lowercase, one number, and one special character.", "regi")
+            validation_messages["password_re"] = "*Password must contain at least one uppercase, one lowercase, one number, and one special character.*"
             is_valid = False
         if len(data['password']) < 8:
-            flash("Password must be at least 8 characters", "regi")
+            validation_messages["password_len"] = "*Password must be at least 8 characters.*"
             is_valid = False
         if data['con_pass'] != data['password']:
-            flash("Passwords must match", "regi")
+            validation_messages["con_pass"] = "*Passwords must match.*"
             is_valid = False
         print('+==========================+')
         print('(model)Validation response:', is_valid)
+        print(validation_messages)
         print('_______________________________________')
-        return is_valid
+        
+        return validation_messages
     
     @classmethod
     def get_by_email(cls,data):

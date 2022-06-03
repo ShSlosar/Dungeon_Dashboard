@@ -8,7 +8,7 @@ var playerCardDiv = document.getElementById('participant-list');
 var centerCard = document.getElementById('notes-card');
 var clockCard = document.getElementById('clock-card');
 var noteTable = document.getElementById('note-table-body');
-var initiativeCard = document.getElementById('ini-card');
+var initiativeCard = document.getElementById('ini-cont');
 var clearIniBtn = document.getElementById('ini-btn');
 //----------------------------------------------------------------
 
@@ -118,14 +118,16 @@ function addPtoIni(e,element){                       //Left off here: find a way
             </div>
         `
 }
-
+//======
 function addMtoIni(e,element){
     e.preventDefault();
     clearIniBtn.type = "button";
+    console.log('THis', game_items);
     for(i=0; i<game_items.monsters.length; i++){
         // console.log(game_items.players[i].id);
-        if(element.monster_id.value == game_items.monsters[i].id){
-            data = game_items.monsters[i];
+        if(element.monster_idx.value == game_items.monsters[i].index){
+            console.log(game_items.monsters[i]);
+            var data = game_items.monsters[i];
         }
     }
     initiativeCard.innerHTML += `
@@ -138,8 +140,8 @@ function addMtoIni(e,element){
 //-----------------------------------------------------------------------------------------------------------------------
 function clearIniCards(e,element){
     e.preventDefault();
+    clearIniBtn.type = "hidden";
     initiativeCard.innerHTML= `
-    <input id="ini-btn" onclick="clearIniCards(event,this)" class="" type="hidden" value="Clear All">
     `
 }
 
@@ -192,12 +194,12 @@ function displayPlayerForm(element){
     <div class="d-flex justify-content-between">
         <form onsubmit="addPlayer(event)" class="mx-auto" id="add-player-form">
             <div class="d-flex justify-content-evenly p-2">
-                <input class="" type="text" name="name" placeholder="Name...">
-                <input class="" type="text" name="race" placeholder="Race">
+                <input required minlength="4" class="" type="text" name="name" placeholder="Name...">
+                <input required minlength="4" class="" type="text" name="race" placeholder="Race">
             </div>
             <div class="d-flex justify-content-evenly p-2">
-                <input class="" type="text" name="alignment" placeholder="alignment">
-                <input class="" type="text" name="class_type" placeholder="class">
+                <input required minlength="4" class="" type="text" name="alignment" placeholder="alignment">
+                <input required minlength="4" class="" type="text" name="class_type" placeholder="class">
             </div>
             <table class="table text-center player-edit">
                 <thead>
@@ -207,10 +209,10 @@ function displayPlayerForm(element){
                     <th>LVL</th>
                 </thead>
                 <tbody>
-                    <td><input class="w-50" min="1" type="number" name="ac"></td>
-                    <td><input class="w-50" min="1" type="number" name="hp"></td>
-                    <td><input class="w-50" min="1" type="number" name="speed"></td>
-                    <td><input class="w-50" min="1" type="number" name="lvl"></td>
+                    <td><input required class="w-50" min="1" type="number" name="ac"></td>
+                    <td><input required class="w-50" min="1" type="number" name="hp"></td>
+                    <td><input required class="w-50" min="1" type="number" name="speed"></td>
+                    <td><input required class="w-50" min="1" type="number" name="lvl"></td>
                 </tbody>
             </table>
             <table class="table text-center player-edit">
@@ -223,17 +225,17 @@ function displayPlayerForm(element){
                     <th>const</th>
                 </thead>
                 <tbody>
-                    <td><input class="w-50" min="1" max="30" type="number" name="str"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="dex"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="intel"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="wis"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="chars"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="const"></td>
+                    <td><input required class="w-50" min="1" max="30" type="number" name="str"></td>
+                    <td><input required class="w-50" min="1" max="30" type="number" name="dex"></td>
+                    <td><input required class="w-50" min="1" max="30" type="number" name="intel"></td>
+                    <td><input required class="w-50" min="1" max="30" type="number" name="wis"></td>
+                    <td><input required class="w-50" min="1" max="30" type="number" name="chars"></td>
+                    <td><input required class="w-50" min="1" max="30" type="number" name="const"></td>
                 </tbody>
             </table>
             <div class="d-flex justify-content-evenly p-3">
                 <input class="sub-btn" type="submit" value="Submit">
-                <input class="sub-btn" onclick="displayCharacterForm(this)" type="button" value="Clear All">
+                <input class="sub-btn" onclick="displayPlayerForm(this)" type="button" value="Clear All">
             </div>
         </form>
     </div>
@@ -253,16 +255,20 @@ function displayPlayerEditForm(e,element){
     console.log(data);
     centerCard.innerHTML = `
     <p onclick="defaultCenterCard(this)" class="fa-solid fa-xmark"></p>
+    <form id="" onsubmit="displayPlayerEditForm(event,this)" class="">
+        <input type="hidden" name="player_id" value="${data.id}">
+        <input class="sub-btn" value="Reset" type="submit">
+    </form>
     <h1 class="text-center">Edit Character</h1>
     <div class="d-flex justify-content-between">
         <form onsubmit="updatePlayer(event)" class="mx-auto" id="edit-player-form">
             <div class="d-flex justify-content-evenly p-2">
-                <input class="" type="text" name="name" value="${data.name}">
-                <input class="" type="text" name="race" value="${data.race}">
+                <input required minlength="4" class="" type="text" name="name" value="${data.name}">
+                <input required minlength="4" class="" type="text" name="race" value="${data.race}">
             </div>
             <div class="d-flex justify-content-evenly p-2">
-                <input class="" type="text" name="alignment" value="${data.alignment}">
-                <input class="" type="text" name="class_type" value="${data.class_type}">
+                <input required minlength="4" class="" type="text" name="alignment" value="${data.alignment}">
+                <input required minlength="4" class="" type="text" name="class_type" value="${data.class_type}">
             </div>
             <table class="table text-center player-edit">
                 <thead>
@@ -272,10 +278,10 @@ function displayPlayerEditForm(e,element){
                     <th>LVL</th>
                 </thead>
                 <tbody>
-                    <td><input class="w-50" min="1" type="number" name="ac" value="${data.ac}"></td>
-                    <td><input class="w-50" min="1" type="number" name="hp" value="${data.hp}"></td>
-                    <td><input class="w-50" min="1" type="number" name="speed" value="${data.speed}"></td>
-                    <td><input class="w-50" min="1" type="number" name="lvl"value="${data.lvl}"></td>
+                    <td><input required class="w-50" min="1" type="number" name="ac" value="${data.ac}"></td>
+                    <td><input required class="w-50" min="1" type="number" name="hp" value="${data.hp}"></td>
+                    <td><input required class="w-50" min="1" type="number" name="speed" value="${data.speed}"></td>
+                    <td><input required class="w-50" min="1" type="number" name="lvl"value="${data.lvl}"></td>
                 </tbody>
             </table>
             <table class="table text-center player-edit">
@@ -288,12 +294,12 @@ function displayPlayerEditForm(e,element){
                     <th>const</th>
                 </thead>
                 <tbody>
-                    <td><input class="w-50" min="1" max="30" type="number" name="str" value="${data.str}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="dex" value="${data.dex}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="intel" value="${data.intel}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="wis" value="${data.wis}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="chars" value="${data.chars}"></td>
-                    <td><input class="w-50" min="1" max="30" type="number" name="const" value="${data.const}"></td>
+                    <td><input required class="w-50" min="1" max="30" type="number" name="str" value="${data.str}"></td>
+                    <td><input required class="w-50" min="1" max="30" type="number" name="dex" value="${data.dex}"></td>
+                    <td><input required class="w-50" min="1" max="30" type="number" name="intel" value="${data.intel}"></td>
+                    <td><input required class="w-50" min="1" max="30" type="number" name="wis" value="${data.wis}"></td>
+                    <td><input required class="w-50" min="1" max="30" type="number" name="chars" value="${data.chars}"></td>
+                    <td><input required class="w-50" min="1" max="30" type="number" name="const" value="${data.const}"></td>
                 </tbody>
             </table>
             <div class="d-flex justify-content-evenly p-3">
@@ -302,10 +308,6 @@ function displayPlayerEditForm(e,element){
                 <input type="hidden" name="creator_id" value="${data.creator_id}">
                 <input type="hidden" name="game_id" value="${data.game_id}">
                 <input class="sub-btn" type="submit" value="Submit">
-                <form id="" onsubmit="displayPlayerEditForm(event,this)" class="">
-                    <input type="hidden" name="player_id" value="${data.id}">
-                    <input class="sub-btn" value="Reset" type="submit">
-                </form>
             </div>
         </form>
     </div>
@@ -319,8 +321,8 @@ function defaultCenterCard(e){
         <h2 class="title-txt text-center border-bottom border-3 border-dark mb-4 pb-4">Notes</h2>
         <div class="d-flex justify-content-evenly align-items-center">
             <form id="note-form" onsubmit="saveNote(event)" class="d-flex flex-column p-2">
-                <input name="title" type="text" placeholder="Title">
-                <textarea class="mt-2" placeholder="Content..." name="content" id="" cols="30" rows="10"></textarea>
+                <input required name="title" type="text" minlength="4" maxlength="15" placeholder="Title">
+                <textarea required class="mt-2" minlength="10" placeholder="Content must be at least 10 characters." name="content" id="" cols="30" rows="10"></textarea>
                 <input class="sub-btn mt-2" type="submit" value="save note">
             </form>
             <div id="note-table" class="notes-table p-2 w-50">
@@ -371,8 +373,8 @@ function noteEditForm(e,element){
         <h2 class="title-txt text-center border-bottom border-3 border-dark mb-4 pb-4">Notes</h2>
         <div class="d-flex justify-content-evenly align-items-center">
             <form id="update-note-form" onsubmit="updateNote(event)" class="d-flex flex-column p-2">
-                <input name="title" type="text" value="${data.title}">
-                <textarea class="mt-2" placeholder="Content..." name="content" id="" cols="30" rows="10">${data.content}</textarea>
+                <input required name="title" minlength="4" maxlength="15" type="text" value="${data.title}">
+                <textarea required class="mt-2" minlength="10" placeholder="Content must be at least 10 characters." name="content" id="" cols="30" rows="10">${data.content}</textarea>
                 <div class="d-flex justify-content-evenly">
                     <input class="sub-btn mt-2" type="submit" value="save note">
                     <input name="id" type="hidden" value="${data.id}">
@@ -533,15 +535,16 @@ function getPlayerData(e,data){
 //Remove monster from game_items____________________________________________________________________________________
 function removeMonsterFromItems(e,element){
     e.preventDefault();
-    console.log(element.monster_id.value);
+    console.log(element.monster_idx.value);
     console.log(game_items.monsters.length)
     for(i=0; i<game_items.monsters.length; i++){
-        if(element.monster_id.value == game_items.monsters[i].id ){
+        if(element.monster_idx.value == game_items.monsters[i].index ){
+            data = game_items.monsters[i].id
             game_items.monsters.splice(i,1);
         }
     }
     console.log(game_items.monsters);
-    removeMonster(e,element.monster_id.value);
+    removeMonster(e,data);
     displayMonsters(e);
 }
 //-----------------------------------------------------------------------------------------------------------
@@ -634,7 +637,7 @@ function displayMonsters(e){
                         </form>
                     </div>
                     <form id="" onsubmit="addMtoIni(event,this)" class=" ">
-                        <input type="hidden" name="monster_id" value="${game_items.monsters[i].id}">
+                        <input type="hidden" name="monster_idx" value="${game_items.monsters[i].index}">
                         <input class="sub-btn" value="Add to inititave" type="submit">
                     </form>
                 </div>
@@ -717,8 +720,8 @@ function runGame(e){
             <h2 class="title-txt text-center border-bottom border-3 border-dark mb-4 pb-4">Notes</h2>
             <div class="d-flex justify-content-evenly align-items-center">
                 <form id="note-form" onsubmit="saveNote(event)" class="d-flex flex-column p-2">
-                    <input name="title" type="text" placeholder="Title">
-                    <textarea class="mt-2" placeholder="Content..." name="content" id="" cols="30" rows="10"></textarea>
+                    <input required name="title" minlength="4" maxlength="15" type="text" placeholder="Title">
+                    <textarea required class="mt-2" minlength="10" placeholder="Content must be at lest 10 characters" name="content" id="" cols="30" rows="10"></textarea>
                     <input class="sub-btn mt-2" type="submit" value="save note">
                 </form>
                 <div id="note-table" class=" p-2 w-50">
@@ -870,7 +873,7 @@ function runGame(e){
                                     </form>
                                 </div>
                                 <form id="" onsubmit="addMtoIni(event,this)" class=" ">
-                                    <input type="hidden" name="monster_id" value="${data.monsters[i].id}">
+                                    <input type="hidden" name="monster_idx" value="${data.monsters[i].index}">
                                     <input class="sub-btn" value="Add to inititave" type="submit">
                                 </form>
                             </div>
@@ -1008,7 +1011,7 @@ function inGameMonsterCard(e,element){
             }
             actions.innerHTML += `
                 <form id="" onsubmit="removeMonsterFromItems(event, this)" class="d-flex justify-content-center">
-                    <input type="hidden" name="monster_id" value="${data.id}">
+                    <input type="hidden" name="monster_idx" value="${data.index}">
                     <input class="sub-btn " value="remove" type="submit">
                 </form>
             `
@@ -1078,7 +1081,9 @@ function getMonsterData(e,data){
     .then(data => {
         console.log(data);
         game_items.monsters.push(data);
+        console.log(game_items.monsters);
         displayMonsters(e);
+
     })
     .catch(err => console.log(err) )
 }

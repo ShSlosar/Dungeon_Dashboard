@@ -34,8 +34,6 @@ def show():
 
 @app.route('/create_user',methods=["POST"])
 def create_user():
-    if not User.validate_user(request.form):
-        return redirect('/')
     pw_hash = bcrypt.generate_password_hash(request.form['password'])
     pprint.pprint(pw_hash)
     data = {
@@ -52,35 +50,38 @@ def create_user():
     print('_________________________________')
     return redirect('/user')
 
+@app.route('/validate/user',methods=['POST'])
+def user_val():
+    pprint.pprint(request.form)
+    messages = User.validate_user(request.form)
+    print (len(messages))
+    if len(messages) < 1:
+        return "true"
+    return messages
+    # return "true"
+
 @app.route('/login', methods=['POST'])
 def login():
-    print("+=============================+")
-    print("(server)attempting to log in...")
-    
     data = { "email" : request.form["email"] }
     user_in_db = User.get_by_email(data)
-    
-    if not user_in_db:
-        flash("Invalid Email/Password","login")
-        print('+============================+')
-        print('(server)Failed Login *email*')
-        print('____________________________________')
-        return redirect("/")
-    
-    if not bcrypt.check_password_hash(user_in_db.password, request.form['password']):
-        flash("Invalid Email/Password", "login")
-        print('+============================+')
-        print('(server)Failed Login *password*')
-        print('____________________________________')
-        return redirect('/')
-    
-    pprint.pprint(user_in_db)
-    print('User found!')
-    print('_________________________________')
-    
     session['user_id'] = user_in_db.id
     return redirect('/user')
 
+@app.route('/validate/login', methods=['POST'])
+def login_val():
+    data = { "email" : request.form["email"] }
+    user_in_db = User.get_by_email(data)
+    message = {
+        "alert" : "*Invalid Login credentials*"
+    }
+    
+    if not user_in_db:
+        return message
+    
+    if not bcrypt.check_password_hash(user_in_db.password, request.form['password']):
+        return message
+    
+    return "true"
 
 @app.route('/logout')
 def logout():
