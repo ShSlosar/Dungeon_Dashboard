@@ -1,5 +1,7 @@
+//------------------------------------------------Login/Registration_Script----------------------------------------------------------------------- 
 
 
+// Display login form_
 function loginCard(){
     var card = document.querySelector("#container")
     card.innerHTML = `
@@ -21,6 +23,9 @@ function loginCard(){
     </form> `
 return card
 }
+//---------------------------
+
+// Display registration form_
 function regiCard(){
     var card = document.querySelector("#container")
     card.innerHTML = `
@@ -61,6 +66,7 @@ function regiCard(){
         </form>`
 return card
 }
+//----------------------------
 
 //AJAX: Validations for Registration =>
 function validate(e){
@@ -76,12 +82,10 @@ function validate(e){
     var regForm =document.getElementById(`registration-card`)
     var reg_sub = document.getElementById('reg-sub')
     var form = new FormData(regForm);
-    console.log('Clicked: createUser()', regForm);
+    console.log('Clicked: validate()');
     fetch('http://127.0.0.1:5000/validate/user', {method:'Post', body: form})
         .then(res => res.json())
         .then(data => {
-            console.log(data)
-            console.log(data.handle_len);
             if(data == true ){
                 console.log("True!");
                 reg_sub.disabled = false;
@@ -144,6 +148,7 @@ function validate(e){
             }
         })
 }
+//=====================================
 
 //AJAX: Validations for Login =>
 function validateLogin(e){
@@ -154,11 +159,10 @@ function validateLogin(e){
     var logForm =document.getElementById(`login-card`)
     var log_sub = document.getElementById('login-btn')
     var form = new FormData(logForm);
-    console.log('Clicked: validateLogin()', logForm);
+    console.log('Clicked: validateLogin()');
     fetch('http://127.0.0.1:5000/validate/login', {method:'Post', body: form})
         .then(res => res.json())
         .then(data => {
-            console.log(data);
             if(logForm.email.value.length < 1 && logForm.password.value.length < 1){
                 alert.hidden = true;
             }
@@ -172,17 +176,4 @@ function validateLogin(e){
             }
         })
 }
-
-
-
-// AJAX Functions 
-
-// function ajaxFunc(e){
-//     e.preventDefault();
-//     var formD = document.getElementById('card-form')
-//     var form = new FormData(formD);
-//     console.log(formD);
-//     fetch('http://localhost:5000/create/game',{method:'POST',body:form})
-//         .then(res => res.json() )                                             //res short for response
-//         .then( res => console.log(res) )
-// }
+//=====================================

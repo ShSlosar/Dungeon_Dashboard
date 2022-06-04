@@ -1,3 +1,6 @@
+//------------------------------------------------User_Dashboard_Script----------------------------------------------------------------------- 
+
+
 //Variables:
 var mainCard = document.getElementById('main-card');
 var options = document.getElementById('options');
@@ -7,7 +10,7 @@ var selectedCardBtn = document.getElementById('main-card-btn');
 var deselectedCardBtn = document.getElementById('un-main-card-btn');
 var deleteAccountBtn = document.getElementById('delete-account');
 
-
+// Display create new dashboard form_
 function newDash(){
     var dashContainer = document.querySelector("#card-container");
     selectedCardBtn.id = 'un-main-card-btn';
@@ -20,11 +23,11 @@ function newDash(){
             </div>
             <div class="">
                 <label class="form-label" for="name">Name your dashboard:</label>
-                <input class="border border-2 border-dark w-100 my-2" type="text" name="name">
+                <input required class="border border-2 border-dark w-100 my-2" minlength="4" type="text" name="name">
             </div>
             <div class="">
                 <label class="form-label" for="time_active">Choose starting time:</label>
-                <input class="border border-2 border-dark w-100 my-2" type="time" step="1" name="time_active">
+                <input required class="border border-2 border-dark w-100 my-2" type="time" name="time_active">
             </div>
             <input name="day" value="0" type="hidden">
             <input class="mx-auto my-2 btn text-center border-2 border-dark" type="submit" value="Launch">
@@ -32,7 +35,9 @@ function newDash(){
         `
         mainCard.id = "main-card-2";
 }
+//-------------------------------------
 
+// Display edit user account form_
 function updateUserAccount(e){
     //e.preventdefault();
     console.log(page_items.user_data)
@@ -69,7 +74,7 @@ function updateUserAccount(e){
             </div>
             <div class="d-flex flex-column justify-content-center m-3">
                 <label for="password">password</label>
-                <input name="password" class="" type="password">
+                <input required name="password" class="" type="password">
             </div>
             <div class="d-flex justify-content-evenly m-3">
                 <input class="sub-btn" value="Save" type="submit">
@@ -82,7 +87,9 @@ function updateUserAccount(e){
         
     `
 }
+//----------------------------------
 
+// Prompt password For delete account function_
 function deleteAccountConf(e){
     e.preventDefault();
     document.querySelector(".delete-acc").setAttribute('onclick','updateUserAccount(event)');
@@ -90,12 +97,14 @@ function deleteAccountConf(e){
     mainCard.innerHTML += `
     <form class="mx-auto" id="del-form" action="/user/delete" method="post">
         <input type="hidden" name="id" value="${page_items.user_data.id}">
-        <input name="password" placeholder="Enter password to delete" class="" type="password">
+        <input required name="password" placeholder="Enter password to delete" class="" type="password">
         <input class="sub-btn" value="Delete" type="submit">
     </form>
     `
 }
+//--------------------------------------------
 
+// Display option links for User_
 function optionLinks(){
     options.innerHTML = `
     <h3 id="main-card-btn" onclick="runUserDash()" class="">My Dashboards</h3>
@@ -103,7 +112,9 @@ function optionLinks(){
     <h3 id="un-main-card-btn" onclick="updateUserAccount(event)" class="">Account</h3>
     `
 }
+//--------------------------------------
 
+// Display all of the users dashboards_
 function listGames(e){
     e.preventDefault();
     html= `
@@ -156,7 +167,9 @@ function listGames(e){
     }
     mainCard.innerHTML = html;
 }
+//-------------------------------------
 
+// Remove dashboard from page_items dictionary_
 function removeDashFromItems(e,element){
     e.preventDefault();
     console.log(page_items.games.length);
@@ -169,8 +182,9 @@ function removeDashFromItems(e,element){
     deleteDash(e,element.game_id.value);
     listGames(e);
 }
+//-----------------------------------------
 
-//AJAX: user dashborad load =>
+//AJAX: User dashborad load =>
 function runUserDash(){
     console.log('Loading user Dashboard...');
     fetch(`http://127.0.0.1:5000/user/dash`)
@@ -243,7 +257,7 @@ function runUserDash(){
 }
 //========================================
 
-//AJAX: update user =>
+//AJAX: Update user =>
 function updateUser(e){
     e.preventDefault();
     var editForm =document.getElementById(`user-update-form`)
@@ -258,6 +272,9 @@ function updateUser(e){
         updateUserAccount();
     })
 }
+//=========================================
+
+//AJAX: Delete account =>
 function delAcc(e){
     // e.preventDefault();
     var delForm =document.getElementById(`del-form`)
@@ -265,6 +282,9 @@ function delAcc(e){
     console.log('Clicked: updateUser()', delForm);
     fetch('http://127.0.0.1:5000/user/delete', {method:'Post', body: form})
 }
+//=========================================
+
+//AJAX: Delete dashboard =>
 function deleteDash(e,id){
     e.preventDefault();
     console.log(id);
@@ -274,4 +294,5 @@ function deleteDash(e,id){
         console.log(data)
     })
 }
+//==========================================
 window.onload = runUserDash();

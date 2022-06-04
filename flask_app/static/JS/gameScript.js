@@ -1,3 +1,6 @@
+//------------------------------------------------Game_Dashboard_Script----------------------------------------------------------------------- 
+
+
 // const print = x => console.log(x);
 //variables__________________________________________________
 var monster_search_form = document.getElementById('monsterForm');
