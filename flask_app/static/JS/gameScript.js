@@ -162,7 +162,7 @@ function getMonsterFromList(e,element){
     e.preventDefault();
     console.log(element);
     element.id = 'monster-form-2';
-    monsterSearch(e);
+    inGameMonsterCard(e,element);
 }
 
 //----------------------------------------------------------------------------------------------
@@ -975,11 +975,148 @@ function removeMonster(e,data){
         console.log(data)
     })
 }
-
-
 //=================================================================================================================
 
-//AJAX: Get Card for monster in game =>
+//AJAX: get new monster data &push to gameitems list =>
+function getMonsterData(e,data){
+    fetch(`https://www.dnd5eapi.co/api/monsters/${data.indx}`)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        game_items.monsters.push(data);
+        console.log(game_items.monsters);
+        displayMonsters(e);
+
+    })
+    .catch(err => console.log(err) )
+}
+//==========================================================================================================
+
+//AJAX: Add Player to game =>
+function addPlayer(e){
+    e.preventDefault();
+    var addForm =document.getElementById(`add-player-form`)
+    var form = new FormData(addForm);
+    console.log('Clicked: addPlayer()', addForm);
+    fetch('http://127.0.0.1:5000/save/player', {method:'Post', body: form})
+    .then(res => res.json())
+    .then(data =>{
+        console.log(data);
+        getPlayerData(e,data);
+        //Display new card at bottom of player ingame list =>
+    })
+}
+//====================================================================================================
+
+//AJAX: Remove Player from game =>
+function removePlayer(e,data){
+    e.preventDefault();
+    console.log('Clicked: deletePlayer()', data);
+    fetch(`http://127.0.0.1:5000/delete/player/${data}`)
+    .then(res => res.json())
+    .then(data =>{
+        console.log(data)
+    })
+}
+//=================================================================================================================
+
+//AJAX: Display player card => -------CAN CONDENSE IN FUTURE?------
+function displayPlayerCard(e){
+    e.preventDefault();
+    var playerForm =document.getElementById(`get-player-form`)
+    var form = new FormData(playerForm);
+    console.log('Clicked: displayPlayerCard()', playerForm)
+    fetch('http://127.0.0.1:5000/get/player', {method:'post', body:form})
+        .then(res => res.json() )                                          //res short for response
+        .then (data =>{
+            console.log(data)
+            // console.log(game_items);
+            var constMod = modifiers(data.const);
+            var strMod = modifiers(data.str);
+            var intMod = modifiers(data.intel);
+            var dexMod = modifiers(data.dex);
+            var charMod = modifiers(data.chars);
+            var wisMod = modifiers(data.wis);
+            playerCardDiv.innerHTML = 
+                `<p onclick="displayPlayers(event)" class="fa-solid fa-xmark"></p>
+                <h4><strong>${data.name}</strong></h4>
+                <div>
+                    <p><strong>alignment:</strong> ${data.alignment}</p>
+                    <p><strong>Race:</strong> ${data.race}</p>
+                    <p><strong>Class:</strong> ${data.class_type}</p>
+                </div>
+                <table class="mx-auto table w-75 text-center">
+                    <thead>
+                        <th>HP</th>
+                        <th>AC</th>
+                        <th>Speed</th>
+                        <th>Initiative</th>
+                    </thead>
+                    <tbody>
+                        <td>${data.hp}</td>
+                        <td>${data.ac}</td>
+                        <td>${data.speed}</td>
+                        <td>${dexMod}</td>
+                    </tbody>
+                </table>
+                <table class="table text-center">
+                    <thead>
+                        <th>Dex</th>
+                        <th>Str</th>
+                        <th>Int</th>
+                        <th>Wis</th>
+                        <th>Char</th>
+                        <th>Con</th>
+                    </thead>
+                    <tbody>
+                        <td>${data.dex}</td>
+                        <td>${data.str}</td>
+                        <td>${data.intel}</td>
+                        <td>${data.wis}</td>
+                        <td>${data.chars}</td>
+                        <td>${data.const}</td>
+                    </tbody>
+                    <tbody>
+                        <td>${dexMod}</td>
+                        <td>${strMod}</td>
+                        <td>${intMod}</td>
+                        <td>${wisMod}</td>
+                        <td>${charMod}</td>
+                        <td>${constMod}</td>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-evenly">
+                    <form id="" onsubmit="displayPlayerEditForm(event,this)" class="">
+                        <input type="hidden" name="player_id" value="${data.id}">
+                        <input class="sub-btn " value="Edit" type="submit">
+                    </form>
+                    <form id="" onsubmit="removePlayerFromItems(event, this)" class="">
+                        <input type="hidden" name="player_id" value="${data.id}">
+                        <input class="sub-btn " value="Remove" type="submit">
+                    </form>
+                </div>`
+            })
+    }
+//===============================================================================================
+
+// Update Player =>
+function updatePlayer(e){
+    e.preventDefault();
+    var editForm =document.getElementById(`edit-player-form`)
+    var form = new FormData(editForm);
+    console.log('Clicked: updatePlayer()', editForm);
+    fetch('http://127.0.0.1:5000/update/player', {method:'Post', body: form})
+    .then(res => res.json())
+    .then(data =>{
+        console.log(data);
+        updatePlayerInItems(e,data);
+        
+    })
+}
+
+//--////////////////////////__API SEARCH__\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+//API: Get Card for monster in game =>
 function inGameMonsterCard(e,element){
     e.preventDefault();
     console.log('Clicked inGameMonsterCard()', element.monster_indx.value);
@@ -1228,238 +1365,6 @@ function inGameMonsterCard(e,element){
 }
 //========================================================================================================================
 
-//AJAX: get new monster data &push to gameitems list =>
-function getMonsterData(e,data){
-    fetch(`https://www.dnd5eapi.co/api/monsters/${data.indx}`)
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
-        game_items.monsters.push(data);
-        console.log(game_items.monsters);
-        displayMonsters(e);
-
-    })
-    .catch(err => console.log(err) )
-}
-//==========================================================================================================
-
-//AJAX: Add Player to game =>
-function addPlayer(e){
-    e.preventDefault();
-    var addForm =document.getElementById(`add-player-form`)
-    var form = new FormData(addForm);
-    console.log('Clicked: addPlayer()', addForm);
-    fetch('http://127.0.0.1:5000/save/player', {method:'Post', body: form})
-    .then(res => res.json())
-    .then(data =>{
-        console.log(data);
-        getPlayerData(e,data);
-        //Display new card at bottom of player ingame list =>
-    })
-}
-//====================================================================================================
-
-//AJAX: Remove Player from game =>
-function removePlayer(e,data){
-    e.preventDefault();
-    console.log('Clicked: deletePlayer()', data);
-    fetch(`http://127.0.0.1:5000/delete/player/${data}`)
-    .then(res => res.json())
-    .then(data =>{
-        console.log(data)
-    })
-}
-//=================================================================================================================
-
-//AJAX: Display player card => -------CAN CONDENSE IN FUTURE?------
-function displayPlayerCard(e){
-    e.preventDefault();
-    var playerForm =document.getElementById(`get-player-form`)
-    var form = new FormData(playerForm);
-    console.log('Clicked: displayPlayerCard()', playerForm)
-    fetch('http://127.0.0.1:5000/get/player', {method:'post', body:form})
-        .then(res => res.json() )                                          //res short for response
-        .then (data =>{
-            console.log(data)
-            // console.log(game_items);
-            var constMod = modifiers(data.const);
-            var strMod = modifiers(data.str);
-            var intMod = modifiers(data.intel);
-            var dexMod = modifiers(data.dex);
-            var charMod = modifiers(data.chars);
-            var wisMod = modifiers(data.wis);
-            playerCardDiv.innerHTML = 
-                `<p onclick="displayPlayers(event)" class="fa-solid fa-xmark"></p>
-                <h4><strong>${data.name}</strong></h4>
-                <div>
-                    <p><strong>alignment:</strong> ${data.alignment}</p>
-                    <p><strong>Race:</strong> ${data.race}</p>
-                    <p><strong>Class:</strong> ${data.class_type}</p>
-                </div>
-                <table class="mx-auto table w-75 text-center">
-                    <thead>
-                        <th>HP</th>
-                        <th>AC</th>
-                        <th>Speed</th>
-                        <th>Initiative</th>
-                    </thead>
-                    <tbody>
-                        <td>${data.hp}</td>
-                        <td>${data.ac}</td>
-                        <td>${data.speed}</td>
-                        <td>${dexMod}</td>
-                    </tbody>
-                </table>
-                <table class="table text-center">
-                    <thead>
-                        <th>Dex</th>
-                        <th>Str</th>
-                        <th>Int</th>
-                        <th>Wis</th>
-                        <th>Char</th>
-                        <th>Con</th>
-                    </thead>
-                    <tbody>
-                        <td>${data.dex}</td>
-                        <td>${data.str}</td>
-                        <td>${data.intel}</td>
-                        <td>${data.wis}</td>
-                        <td>${data.chars}</td>
-                        <td>${data.const}</td>
-                    </tbody>
-                    <tbody>
-                        <td>${dexMod}</td>
-                        <td>${strMod}</td>
-                        <td>${intMod}</td>
-                        <td>${wisMod}</td>
-                        <td>${charMod}</td>
-                        <td>${constMod}</td>
-                    </tbody>
-                </table>
-                <div class="d-flex justify-content-evenly">
-                    <form id="" onsubmit="displayPlayerEditForm(event,this)" class="">
-                        <input type="hidden" name="player_id" value="${data.id}">
-                        <input class="sub-btn " value="Edit" type="submit">
-                    </form>
-                    <form id="" onsubmit="removePlayerFromItems(event, this)" class="">
-                        <input type="hidden" name="player_id" value="${data.id}">
-                        <input class="sub-btn " value="Remove" type="submit">
-                    </form>
-                </div>`
-            })
-    }
-//===============================================================================================
-
-// Update Player =>
-function updatePlayer(e){
-    e.preventDefault();
-    var editForm =document.getElementById(`edit-player-form`)
-    var form = new FormData(editForm);
-    console.log('Clicked: updatePlayer()', editForm);
-    fetch('http://127.0.0.1:5000/update/player', {method:'Post', body: form})
-    .then(res => res.json())
-    .then(data =>{
-        console.log(data);
-        updatePlayerInItems(e,data);
-        
-    })
-}
-
-//--////////////////////////__API SEARCH__\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-//AJAX: Display searched Monster Card => -------CAN CONDENSE IN FUTURE?------
-function monsterSearch(e){
-    e.preventDefault();
-    var searchForm2 =document.getElementById(`monster-form-2`)
-    var form = new FormData(searchForm2);
-    console.log('Clicked: monsterSearch()', searchForm2)
-    fetch('http://127.0.0.1:5000/search/monsters', {method:'Post', body: form})
-    .then(res => res.json())
-    .then(data =>{
-        console.log(data);
-        console.log(data.name); 
-        var constMod = modifiers(data.constitution);
-        var strMod = modifiers(data.strength);
-        var intMod = modifiers(data.intelligence);
-        var dexMod = modifiers(data.dexterity);
-        var charMod = modifiers(data.charisma);
-        var wisMod = modifiers(data.wisdom);
-        // Monster Action Cards___________________________________________________________________
-        function actionCards(data){
-            for(var num=0; num<data.actions.length; num++){
-                console.log('looping...',num)
-                    actions.innerHTML +=
-                    `<table class="table">
-                        <p><strong>${data.actions[parseInt(num)].name}</strong></p>
-                        <thead>
-                            <th>Description</th>
-                        </thead>
-                        <tbody>
-                            <td>${data.actions[parseInt(num)].desc}</td>
-                        </tbody>
-                    </table>`
-            }
-        }
-        //-----------------------------------------------------------------------------------------
-        //Monster stats____________________________________________________________________________
-        monsters.innerHTML = 
-        `<p onclick="displayMonsters(event)" class="fa-solid fa-xmark"></p>
-        <h4><strong>${data.name}</strong></h4>
-        <form id="" onsubmit="addMonsterToGame(event,this)" class=" ">
-            <input type="hidden" name="monster_indx" value="${data.index}">
-            <input type="submit" value="Add to game">
-        </form>
-        <div>
-            <p><strong>alignment:</strong> ${data.alignment}</p>
-            <p><strong>Race:</strong> ${data.type}</p>
-        </div>
-        <table class="mx-auto table w-75 text-center">
-            <thead>
-                <th>HP</th>
-                <th>AC</th>
-                <th>Speed</th>
-                <th>Initiative</th>
-            </thead>
-            <tbody>
-                <td>${data.hit_points}</td>
-                <td>${data.armor_class}</td>
-                <td>${data.speed.walk}</td>
-                <td>${data.dexterity}</td>
-            </tbody>
-        </table>
-        <table class="table text-center">
-            <thead>
-                <th>Dex</th>
-                <th>Str</th>
-                <th>Int</th>
-                <th>Wis</th>
-                <th>Char</th>
-                <th>Const</th>
-            </thead>
-            <tbody>
-                <td>${data.dexterity}</td>
-                <td>${data.strength}</td>
-                <td>${data.intelligence}</td>
-                <td>${data.wisdom}</td>
-                <td>${data.charisma}</td>
-                <td>${data.constitution}</td>
-            </tbody>
-            <tbody>
-                <td>${dexMod}</td>
-                <td>${strMod}</td>
-                <td>${intMod}</td>
-                <td>${wisMod}</td>
-                <td>${charMod}</td>
-                <td>${constMod}</td>
-            </tbody>
-        </table>`
-        //----------------------------------------------------------------------------
-        console.log("actions length:");
-        console.log(data.actions.length);
-        actionCards(data);
-    })
-}
-//================================================================================================
 
 //AJAX: Monster Search-by-Challenge Rating =>
 function monsterSearch2(e){
