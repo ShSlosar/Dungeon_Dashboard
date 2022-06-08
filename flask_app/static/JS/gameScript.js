@@ -510,7 +510,7 @@ function displayPlayers(e){
                     <div>
                         <form id="" onsubmit="getPlayerFromList(event,this)" class=" ">
                             <input type="hidden" name="player_id" value="${game_items.players[i].id}">
-                            <input class="sub-btn " value="View sheet" type="submit">
+                            <input class="sub-btn " value="View Card" type="submit">
                         </form>
                     </div>
                     <form id="" onsubmit="addPtoIni(event,this)" class=" ">
@@ -636,7 +636,7 @@ function displayMonsters(e){
                     <div>
                         <form id="" onsubmit="inGameMonsterCard(event,this)" class=" ">
                             <input type="hidden" name="monster_indx" value="${game_items.monsters[i].index}">
-                            <input class="sub-btn" value="View sheet" type="submit">
+                            <input class="sub-btn" value="View Card" type="submit">
                         </form>
                     </div>
                     <form id="" onsubmit="addMtoIni(event,this)" class=" ">
@@ -810,7 +810,7 @@ function runGame(e){
                         <div class="d-flex justify-content-between">
                             <form id="" onsubmit="getPlayerFromList(event, this)" class=" ">
                                 <input type="hidden" name="player_id" value="${data.players[i].id}">
-                                <input class="sub-btn " value="View sheet" type="submit">
+                                <input class="sub-btn " value="View Card" type="submit">
                             </form>
                             <form id="" onsubmit="addPtoIni(event,this)" class="">
                                 <input type="hidden" name="player_id" value="${data.players[i].id}">
@@ -872,7 +872,7 @@ function runGame(e){
                                 <div>
                                     <form id="" onsubmit="inGameMonsterCard(event,this)" class=" ">
                                         <input type="hidden" name="monster_indx" value="${data.monsters[i].index}">
-                                        <input class="sub-btn " value="View sheet" type="submit">
+                                        <input class="sub-btn " value="View Card" type="submit">
                                     </form>
                                 </div>
                                 <form id="" onsubmit="addMtoIni(event,this)" class=" ">
