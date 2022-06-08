@@ -989,6 +989,7 @@ function inGameMonsterCard(e,element){
     .then(data => {
         console.log(data);
         console.log(data.name); 
+        console.log(data.speed)
         var constMod = modifiers(data.constitution);
         var strMod = modifiers(data.strength);
         var intMod = modifiers(data.intelligence);
@@ -998,20 +999,34 @@ function inGameMonsterCard(e,element){
 
         // Monster Action Cards___________________________________________________________________
         function actionCards(data){
+            actions.innerHTML +=`
+            <h5 class="border-bottom border-dark border-2"><strong>Actions</strong></h5>
+            `
+            actions.innerHTML += `
+            <div>
+            `
             for(var num=0; num<data.actions.length; num++){
                 console.log('looping...',num)
                 actions.innerHTML +=
-                `<table class="table">
-                    <p><strong>${data.actions[parseInt(num)].name}</strong></p>
-                    <thead>
-                        <th>Description</th>
-                    </thead>
-                    <tbody>
-                        <td>${data.actions[parseInt(num)].desc}</td>
-                    </tbody>
-                </table>
+                `
+                    <p>${data.actions[parseInt(num)].name}:</p>
+                    <p class="border-bottom border-dark border-2">${data.actions[parseInt(num)].desc}</p>
                 `
             }
+            if(data.legendary_actions.length >0){
+                var lenAct = data.legendary_actions;
+                actions.innerHTML += `
+                    <h5><strong>Legendary Actions</strong></h5>
+                `
+                for(var i=0; i<lenAct.length; i++){
+                    actions.innerHTML += `
+                    <p>${lenAct[i].name}</p>
+                    <p class="border-bottom border-dark border-2">${lenAct[i].desc}</p>
+                    `
+                }
+            }
+            actions.innerHTML +=`
+            </div>`
             actions.innerHTML += `
                 <form id="" onsubmit="removeMonsterFromItems(event, this)" class="d-flex justify-content-center">
                     <input type="hidden" name="monster_idx" value="${data.index}">
@@ -1021,25 +1036,26 @@ function inGameMonsterCard(e,element){
         }
         //-----------------------------------------------------------------------------------------
         //Monster stats____________________________________________________________________________
-        monsters.innerHTML = 
+        var html = 
         `<p onclick="displayMonsters(event)" class="fa-solid fa-xmark"></p>
         <h4><strong>${data.name}</strong></h4>
         <div>
             <p><strong>alignment:</strong> ${data.alignment}</p>
             <p><strong>Race:</strong> ${data.type}</p>
+            <p><strong>Size:</strong> ${data.size}</p>
         </div>
         <table class="mx-auto table w-75 text-center">
             <thead>
+                <th>Challenge</th>
                 <th>HP</th>
                 <th>AC</th>
-                <th>Speed</th>
                 <th>Initiative</th>
             </thead>
             <tbody>
+                <td>${data.challenge_rating}</td>
                 <td>${data.hit_points}</td>
                 <td>${data.armor_class}</td>
-                <td>${data.speed.walk}</td>
-                <td>${data.dexterity}</td>
+                <td>${dexMod}</td>
             </tbody>
         </table>
         <table class="table text-center">
@@ -1068,6 +1084,141 @@ function inGameMonsterCard(e,element){
                 <td>${constMod}</td>
             </tbody>
         </table>`
+        if(data.proficiencies.length > 0){
+            html+=`
+            <div class="border-bottom border-dark border-2">
+                <p><strong>Proficiencies</strong></p>
+                <p>- 
+            `
+            var prof = data.proficiencies
+            for(i=0; i< prof.length; i++){
+                html +=`
+                ${prof[i].proficiency.name}(${prof[i].value}) - 
+                `
+            }
+            html+=`
+                </p>
+            </div>
+            `
+        }
+        if(data.senses){
+            html += `
+                <div class="border-bottom border-dark border-2">
+                    <p><strong>Senses</strong></p>
+                        
+            `
+            for(var [key,value] of Object.entries(data.senses)){
+                html += `
+                <p>${key}: ${value}</p>
+                `
+            }
+            html+= `
+                
+                    </div>
+                `
+        }
+        html +=`
+        <div class="border-bottom border-dark border-2">
+        <p><strong>Speed</strong></p>
+        <p>| 
+        
+        `
+        for(var [key,value] of Object.entries(data.speed)){
+            html += `
+            ${key}: ${value} 
+            `
+        }
+        html+= `
+            |</p>
+        </div>
+        `
+        html +=`
+            <div class="border-bottom border-dark border-2">
+                <p><strong>Languages</strong></p>
+                <p>
+        `
+        if(data.languages.length > 0){
+        html += `${data.languages}</p>`
+        }
+        if(data.languages.length < 1){
+            html += `None</p>`
+            }
+        html+=`
+        </div>
+        `
+
+        if(data.condition_immunities.length > 0){
+            var conIm = data.condition_immunities;
+            html += `
+            <div class="border-bottom border-dark border-2">
+                <p><strong>Condition Immunities</strong></p>
+                <p>| 
+            
+            `
+            for(var i=0; i<conIm.length; i++){
+                html+= `
+                ${conIm[i].name} |
+                `
+            }
+            html+= `
+                </p>
+            </div>
+            `
+        }
+        if(data.damage_immunities.length > 0){
+            var damIm = data.damage_immunities;
+            html += `
+            <div class="border-bottom border-dark border-2">
+                <p><strong>Damage Immunities</strong></p>
+                <p>| 
+            `
+            for(var i=0; i<damIm.length; i++){
+                html += `
+                ${damIm[i]} |
+                `
+            }
+            html+= `
+                </p>
+            </div>
+            `
+        }
+        if(data.damage_vulnerabilities.length > 0){
+            var damV = data.damage_vulnerabilities;
+            html += `
+            <div class="border-bottom border-dark border-2">
+                <p><strong>Damage Vulnerabilities</strong></p>
+                <p>| 
+            `
+            for(var i=0; i<damV.length; i++){
+                html += `
+                ${damV[i]} |
+                `
+            }
+            html+= `
+                </p>
+            </div>
+            `
+        }
+        if(data.special_abilities.length > 0){
+            var spcAbil = data.special_abilities;
+            html += `
+            <div>
+                <h5><strong>Special Abilities</strong></h5>
+                
+            `
+            for(var i=0; i<spcAbil.length; i++){
+                html += ` 
+                <p>${spcAbil[i].name}:</p>
+                <p class="border-bottom border-dark border-2">${spcAbil[i].desc}</p>
+                `
+            }
+            html+= `
+            </div>
+            `
+        }
+
+
+        monsters.innerHTML = html;
         //----------------------------------------------------------------------------
         console.log("actions length:");
         console.log(data.actions.length);
@@ -1143,6 +1294,7 @@ function displayPlayerCard(e){
                 <div>
                     <p><strong>alignment:</strong> ${data.alignment}</p>
                     <p><strong>Race:</strong> ${data.race}</p>
+                    <p><strong>Class:</strong> ${data.class_type}</p>
                 </div>
                 <table class="mx-auto table w-75 text-center">
                     <thead>
