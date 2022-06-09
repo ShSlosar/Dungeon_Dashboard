@@ -19,7 +19,8 @@ p,th,td,label,h4,h5,a{
     box-shadow: 2px 2px 2px 2px rgba(17, 21, 13, 0.64);
     max-height: 125px;
 }
-#note-table{
+#note-table,
+#spell-table{
     max-height: 300px;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.51);
@@ -70,14 +71,18 @@ a:hover{
 #monster-result-card{
     overflow: auto;
 }
+body::-webkit-scrollbar-thumb,
 .game-card-main::-webkit-scrollbar-thumb,
 textarea::-webkit-scrollbar-thumb,
 #ini-card::-webkit-scrollbar-thumb,
-#note-table::-webkit-scrollbar-thumb {
+#note-table::-webkit-scrollbar-thumb,
+#spell-table::-webkit-scrollbar-thumb {
     background:  rgba(85, 79, 26, 0.435);
     border-radius: 1ex;
     box-shadow: none;
 }
+body::-webkit-scrollbar,
+body::-webkit-scrollbar-corner,
 .game-card-main::-webkit-scrollbar,
 .game-card-main::-webkit-scrollbar-corner,
 textarea::-webkit-scrollbar-corner,
@@ -85,7 +90,9 @@ textarea::-webkit-scrollbar,
 #ini-card::-webkit-scrollbar,
 #ini-card::-webkit-scrollbar-corner,
 #note-table::-webkit-scrollbar,
-#note-table::-webkit-scrollbar-corner{
+#note-table::-webkit-scrollbar-corner,
+#spell-table::-webkit-scrollbar,
+#spell-table::-webkit-scrollbar-corner{
     background: none;
 }
 input[type="number"]::-webkit-outer-spin-button,

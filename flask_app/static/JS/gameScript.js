@@ -358,6 +358,40 @@ function defaultCenterCard(e){
             </div>
         </div>
         `
+        html += `
+                <div class="d-flex flex-column justify-content-center mb-2">
+                    <h2 class="text-center">Spells</h2>
+                    <form class="mx-auto" onsubmit="getSpellList(event,this)">
+                        <div class="d-flex">
+                            <select name="spellSchool" id="">
+                                <option disabled selected value="">School</option>
+                                <option value="conjuration">Conjuration</option>
+                                <option value="necromancy">Necromancy</option>
+                                <option value="evocation">Evocation</option>
+                                <option value="abjuration">Abjuration</option>
+                                <option value="transmutation">Transmutation</option>
+                                <option value="divination">Divination</option>
+                                <option value="enchantment">Enchantment</option>
+                                <option value="illusion">Illusion</option>
+                            </select>
+                            <select name="spellLvl" id="">
+                                <option disabled selected value="">Level</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                            </select>
+                        </div>
+                        <input class="sub-btn w-100 mt-3" type="submit">
+                    </form>
+                </div>
+                `
     centerCard.innerHTML = html
 }
 //-----------------------------------------------------------------------------------------------
@@ -757,6 +791,40 @@ function runGame(e){
                 </div>
             </div>
         `
+                html += `
+                <div class="d-flex flex-column justify-content-center mb-2">
+                    <h2 class="text-center">Spells</h2>
+                    <form class="mx-auto" onsubmit="getSpellList(event,this)">
+                        <div class="d-flex">
+                            <select name="spellSchool" id="">
+                                <option disabled selected value="">School</option>
+                                <option value="conjuration">Conjuration</option>
+                                <option value="necromancy">Necromancy</option>
+                                <option value="evocation">Evocation</option>
+                                <option value="abjuration">Abjuration</option>
+                                <option value="transmutation">Transmutation</option>
+                                <option value="divination">Divination</option>
+                                <option value="enchantment">Enchantment</option>
+                                <option value="illusion">Illusion</option>
+                            </select>
+                            <select name="spellLvl" id="">
+                                <option disabled selected value="">Level</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                            </select>
+                        </div>
+                        <input class="sub-btn w-100 mt-3" type="submit">
+                    </form>
+                </div>
+                `
                 centerCard.innerHTML = html;
             }
         
@@ -1407,4 +1475,129 @@ function monsterSearch2(e){
     })
 }
 //=================================================================================================
+
+//API: Spell Search =>
+function getSpellList(e,element){
+    e.preventDefault();
+    console.log('Clicked getSpellList()');
+    fetch(`https://www.dnd5eapi.co/api/spells?level=${element.spellLvl.value}&school=${element.spellSchool.value}`)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        var html = `
+            <p onclick="defaultCenterCard(this)" class="fa-solid fa-xmark"></p>
+            <div id="spell-section"  class="d-flex flex-column justify-content-center">
+                <table id="spell-table" class="table note-tbl w-75 mx-auto">
+                    <thead>
+                        <th>${data.count} Level ${element.spellLvl.value}, ${element.spellSchool.value} Spells...</th> 
+                    </thead>
+        `
+        for(i=0; i<data.results.length;i++){
+            html+=`
+                <tbody>
+                    <td>
+                        <form onsubmit="getSpellCard(event,this)">
+                            <input type="hidden" name="spellIndex" value="${data.results[i].index}">
+                            <input class="sub-btn" type="submit" value="${data.results[i].name}">
+                        </form>
+                    </td>
+                </tbody>
+            `
+        }
+        html+=`
+            </table>
+        </div>
+        `
+        centerCard.innerHTML += html;
+    })
+
+}
+function getSpellCard(e,element){
+    e.preventDefault();
+    var spellSection = document.getElementById('spell-section')
+    console.log('Clicked getSpellList()');
+    fetch(`https://www.dnd5eapi.co/api/spells/${element.spellIndex.value}`)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        var html = `<div id="spell-table" class="mt-3 p-2">
+        <h5>${data.name} | Level ${data.level} | ${data.school.name}</h5>
+        `
+        html +=`
+            <p><strong>Class(es)</strong>: 
+        `
+        for(i=0; i<data.classes.length;i++){
+            if(i == data.classes.length-1){
+                html+= ` 
+                    ${data.classes[i].name} 
+                    `
+            }
+            
+            else{
+                html+= ` 
+                ${data.classes[i].name}, 
+            `
+            }
+        }
+        html +=`
+        </p>
+        `
+        html +=`
+        <p><strong>${data.casting_time} | ${data.range} | ${data.duration}</strong></p>
+        `
+        if(data.damage){
+            html +=`
+                <p><strong>Damage</strong>: ${data.damage.damage_type.name}</p>
+                `
+        }
+        
+        if(data.area_of_effect){
+            html += `
+            <p><strong>Area of Effect</strong></p>
+            `
+            for(var [key,value] of Object.entries(data.area_of_effect)){
+                html += `
+                <p>${key}: ${value}</p>
+                `
+            }
+        }
+        html += `
+        <p>|
+        `
+        for(i=0;i<data.components.length;i++){
+            html +=`
+            ${data.components[i]} |
+            `
+        }
+        html += `
+        </p>
+        `
+        if(data.concintration == true){
+            html +=`
+                <p><strong>Concentration</strong>: Required.</p>
+                `
+        }
+        if(data.ritual == true){
+            html += `
+            <p><strong>Ritual</strong>: Required.</p>
+            `
+        }
+        if(data.material != undefined){
+            html += `
+                <p><strong>Material(s)</strong>: ${data.material}</p>
+                `
+        }
+        
+        for(i=0;i<data.desc.length;i++){
+            html += ` <p>${data.desc[i]} </p>`
+        }
+
+
+
+        html += `
+        </div>
+        `
+        spellSection.innerHTML += html;
+    })
+    }
 window.onload = runGame();
