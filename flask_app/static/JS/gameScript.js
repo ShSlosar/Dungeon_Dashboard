@@ -626,7 +626,11 @@ function displayMonsters(e){
     monsters.innerHTML = `<p><strong>There are ${game_items.monsters.length} monsters in this game</strong></p>`
     for(var i=0; i<game_items.monsters.length; i++){
         monsters.innerHTML+=
-        `<div class="monst-crd d-flex justify-content-center border-bottom border-light p-2 mt-2">
+        `<form  onsubmit="removeMonsterFromItems(event, this)" class="mt-0 p-1">
+            <input type="hidden" name="monster_idx" value="${game_items.monsters[i].indx}">
+            <input id="rem-btn" class="sub-btn h-25 " value="X" type="submit">
+        </form>
+        <div class="monst-crd d-flex justify-content-center border-bottom border-light p-2 mt-2">
             <div class="d-flex flex-column">
                 <h4 class="text-center"><strong>${game_items.monsters[i].name}</strong></h4>
                 <div class="d-flex justify-content-evenly border-top border-dark">
@@ -896,7 +900,12 @@ function runGame(e){
             for(var i=0; i<data.monsters.length; i++){
                 console.log(data.monsters[i].id)
                 monsters.innerHTML+=
-                `<div class="monst-crd d-flex justify-content-center border-bottom border-light p-2 mt-2">
+                `
+                <form  onsubmit="removeMonsterFromItems(event, this)" class="mt-0  p-1">
+                    <input type="hidden" name="monster_idx" value="${data.monsters[i].index}">
+                    <input id="rem-btn" class="sub-btn h-25 " value="X" type="submit">
+                </form>
+                <div class="monst-crd d-flex justify-content-center border-bottom border-light p-2 mt-2">
                         <div class="d-flex flex-column">
                             <h4 class="text-center"><strong>${data.monsters[i].name}</strong></h4>
                             <div class="d-flex justify-content-evenly border-top border-dark">

@@ -43,6 +43,9 @@ p,th,td,label,h4,h5,a{
 .ini{
     background-color: rgba(0, 0, 0, 0.51);
 }
+#rem-btn{
+    margin-left: none;
+}
 input[type=number],
 input[type=submit],
 input[type=btn],
