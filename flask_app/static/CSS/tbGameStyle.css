@@ -9,25 +9,63 @@ body {
 background-image: url("data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='Page-1' fill='none' fill-rule='evenodd'%3E%3Cg id='brick-wall' fill='%23000000' fill-opacity='0.15'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); */
 }
 .title-txt,
-p,th,td,label,h4,h5,a{
+p,td,th,label,h4,h5{
+    font-family: 'Roboto', sans-serif;
+    color: rgb(0, 0, 0);
+}
+#game-name{
+    margin-top: 15%;
+    font-size: larger;
+    font-weight: bolder;
+}
+#note-table td, 
+#note-table th, a {
     font-family: 'Roboto', sans-serif;
     color: rgba(190, 190, 190, 0.819);
-}
-#title-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 50%;
 }
 #game-header
 {
     background-color: rgba(128, 123, 123, 0.31);
     box-shadow: 2px 2px 2px 2px rgba(17, 21, 13, 0.64);
-    max-height: 125px;
+    height: inherit;
+    width: 100%;
+    flex-direction: column;
+    overflow: auto;
+    padding: 20px;
+}
+#page-opt{
+    display: block;
+    margin: auto;
+}
+#page-opt h5{
+    font-size: large;
+    margin-right: 30%;
+    align-items: center;
+}
+#title-header{
+    display: flex;
+    justify-content: center;
+}
+#title-header img{
+    margin-top: 15%;
+    height: 80%;
+    width: 80%;
+}
+#note-card{
+    display: flex;
+    flex-direction: column;
+}
+#n-cd{
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+}
+#n-cd form{
+    width: 100%;
 }
 #note-table,
 #spell-table{
     max-height: 300px;
+    width: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.51);
 }
@@ -41,10 +79,30 @@ p,th,td,label,h4,h5,a{
     box-shadow: 2px 2px 2px 2px  rgba(0, 0, 0, 0.24);
     border: solid 2px rgba(0, 0, 0, 0.221);
     border-radius: 5px;
+    max-height: 300px;
 }
+
+.game-card,
+#players-sidebar,
+#note-md-cd{
+    margin-top: 5%;
+}
+
+
 .game-card-main{
-    height: 500px;
-    
+    height: auto;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+#bottom-container{
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-items: center;
+}
+#top-container{
+    flex-wrap: wrap;
+    flex-direction: column;
 }
 .ini{
     background-color: rgba(0, 0, 0, 0.51);
@@ -148,9 +206,15 @@ input[type="number"]::-webkit-inner-spin-button {
     max-height: 120px;
     min-height: 120px;
     border-radius: 5px;
+    width: inherit;
+    margin-left: none;
+    margin-right: none;
 }
 #ini-card{
     max-height: 120px;
     min-height: 120px;
     border-radius: 5px;
+    width: inherit;
+    margin-left: none;
+    margin-right: none;
 }

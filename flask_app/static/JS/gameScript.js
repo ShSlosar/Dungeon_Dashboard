@@ -9,6 +9,8 @@ var monster = document.getElementById('monster-sidebar');
 var actions = document.getElementById('actions');
 var playerCardDiv = document.getElementById('participant-list');
 var centerCard = document.getElementById('notes-card');
+var spellList = document.getElementById('spell-list');
+var spellCards = document.getElementById('spell-cards');
 var clockCard = document.getElementById('clock-card');
 var noteTable = document.getElementById('note-table-body');
 var initiativeCard = document.getElementById('ini-cont');
@@ -320,15 +322,15 @@ function displayPlayerEditForm(e,element){
 //Revert Center Card to Default View_____________________________________________________________
 function defaultCenterCard(e){
     // e.preventDefault();
-    html = `
+    var html = `
         <h2 class="title-txt text-center border-bottom border-3 border-dark mb-4 pb-4">Notes</h2>
-        <div class="d-flex justify-content-evenly align-items-center">
+        <div id="n-cd" class="d-flex justify-content-evenly align-items-center">
             <form id="note-form" onsubmit="saveNote(event)" class="d-flex flex-column p-2">
                 <input required name="title" type="text" minlength="4" maxlength="15" placeholder="Title">
                 <textarea required class="mt-2" minlength="10" placeholder="Content must be at least 10 characters." name="content" id="" cols="30" rows="10"></textarea>
                 <input class="sub-btn mt-2" type="submit" value="save note">
             </form>
-            <div id="note-table" class="notes-table p-2 w-50">
+            <div id="note-table" class="notes-table p-2">
                 <table class="table text-center note-tbl">
                     <thead>
                         <th>title</th>
@@ -358,41 +360,131 @@ function defaultCenterCard(e){
             </div>
         </div>
         `
-        html += `
-                <div class="d-flex flex-column justify-content-center mb-2">
-                    <h2 class="text-center">Spells</h2>
-                    <form class="mx-auto" onsubmit="getSpellList(event,this)">
-                        <div class="d-flex">
-                            <select name="spellSchool" id="">
-                                <option disabled selected value="">School</option>
-                                <option value="conjuration">Conjuration</option>
-                                <option value="necromancy">Necromancy</option>
-                                <option value="evocation">Evocation</option>
-                                <option value="abjuration">Abjuration</option>
-                                <option value="transmutation">Transmutation</option>
-                                <option value="divination">Divination</option>
-                                <option value="enchantment">Enchantment</option>
-                                <option value="illusion">Illusion</option>
-                            </select>
-                            <select name="spellLvl" id="">
-                                <option disabled selected value="">Level</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                            </select>
-                        </div>
-                        <input class="sub-btn w-100 mt-3" type="submit">
-                    </form>
-                </div>
-                `
     centerCard.innerHTML = html
+    var spellHtml = `
+        <div class="d-flex flex-column justify-content-center mb-2">
+            <h2 class="text-center">Spells</h2>
+            <form class="mx-auto" onsubmit="getSpellList(event,this)">
+                <div class="d-flex">
+                    <select name="spellSchool" id="">
+                        <option disabled selected value="">School</option>
+                        <option value="conjuration">Conjuration</option>
+                        <option value="necromancy">Necromancy</option>
+                        <option value="evocation">Evocation</option>
+                        <option value="abjuration">Abjuration</option>
+                        <option value="transmutation">Transmutation</option>
+                        <option value="divination">Divination</option>
+                        <option value="enchantment">Enchantment</option>
+                        <option value="illusion">Illusion</option>
+                    </select>
+                    <select name="spellLvl" id="">
+                        <option disabled selected value="">Level</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+                <input class="sub-btn w-100 mt-3" type="submit">
+            </form>
+        </div>
+    `
+    spellList.innerHTML = spellHtml;
+    console.log('Length Spells:',spells.length);
+    spellCards.innerHTML = '';
+    for(i=0; i<spells.length; i++){
+            
+        console.log(spells[i]);
+        var shtml = `<div id="spell-table" class="mt-3 p-2">
+        <form id="" onsubmit="removeSpell(event, this)" class="">
+            <input type="hidden" name="_id" value="${spells[i]._id}">
+            <input class="sub-btn " value="X" type="submit">
+        </form>
+        <h5>${spells[i].name} | Level ${spells[i].level} | ${spells[i].school.name}</h5>
+        `
+        shtml +=`
+            <p><strong>Class(es)</strong>: 
+        `
+        for(n=0; n<spells[i].classes.length;n++){
+            if(n == spells[i].classes.length-1){
+                shtml+= ` 
+                    ${spells[i].classes[n].name} 
+                    `
+            }
+            
+            else{
+                shtml+= ` 
+                ${spells[i].classes[n].name}, 
+            `
+            }
+        }
+        shtml +=`
+        </p>
+        `
+        shtml +=`
+        <p><strong>${spells[i].casting_time} | ${spells[i].range} | ${spells[i].duration}</strong></p>
+        `
+        if(spells[i].damage){
+            shtml +=`
+                <p><strong>Damage</strong>: ${spells[i].damage.damage_type.name}</p>
+                `
+        }
+        
+        if(spells[i].area_of_effect){
+            shtml += `
+            <p><strong>Area of Effect</strong></p>
+            `
+            for(var [key,value] of Object.entries(spells[i].area_of_effect)){
+                shtml += `
+                <p>${key}: ${value}</p>
+                `
+            }
+        }
+        shtml += `
+        <p>|
+        `
+        for(n=0;n<spells[i].components.length;n++){
+            console.log(spells[i].components[n]);
+            shtml +=`
+            ${spells[i].components[n]} |
+            `
+        }
+        shtml += `
+        </p>
+        `
+        if(spells[i].concintration == true){
+            shtml +=`
+                <p><strong>Concentration</strong>: Required.</p>
+                `
+        }
+        if(spells[i].ritual == true){
+            shtml += `
+            <p><strong>Ritual</strong>: Required.</p>
+            `
+        }
+        if(spells[i].material != undefined){
+            shtml += `
+                <p><strong>Material(s)</strong>: ${spells[i].material}</p>
+                `
+        }
+        
+        for(n=0;n<spells[i].desc.length;n++){
+            shtml += ` <p>${spells[i].desc[n]} </p>`
+        }
+        shtml += `
+        </div>
+        `
+        spellCards.innerHTML += shtml;
+    }
+
+
+    // spellCards.innerHtml = shtml;
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -408,7 +500,7 @@ function noteEditForm(e,element){
     }
     html = `
         <h2 class="title-txt text-center border-bottom border-3 border-dark mb-4 pb-4">Notes</h2>
-        <div class="d-flex justify-content-evenly align-items-center">
+        <div id="n-cd" class="d-flex justify-content-evenly align-items-center">
             <form id="update-note-form" onsubmit="updateNote(event)" class="d-flex flex-column p-2">
                 <input required name="title" minlength="4" maxlength="15" type="text" value="${data.title}">
                 <textarea required class="mt-2" minlength="10" placeholder="Content must be at least 10 characters." name="content" id="" cols="30" rows="10">${data.content}</textarea>
@@ -418,7 +510,7 @@ function noteEditForm(e,element){
                     <input class="sub-btn mt-2" onclick="defaultCenterCard(event)" type="button" value="Back">
                 </div>
             </form>
-            <div id="note-table" class="notes-table p-2 w-50">
+            <div id="note-table" class="notes-table p-2 ">
                 <table class="table text-center note-tbl">
                     <thead>
                         <th>title</th>
@@ -741,6 +833,7 @@ function runGame(e){
             {
             // CLOCK:
             globalThis.iniList = [];
+            globalThis.spells = [];
             globalThis.game_items = data;
             console.log(game_items.notes[0])
             var time = data.clock_data.time_active;
@@ -759,13 +852,13 @@ function runGame(e){
         function list_notes(){
             html = `
             <h2 class="title-txt text-center border-bottom border-3 border-dark mb-4 pb-4">Notes</h2>
-            <div class="d-flex justify-content-evenly align-items-center">
+            <div id="n-cd" class="d-flex justify-content-evenly align-items-center">
                 <form id="note-form" onsubmit="saveNote(event)" class="d-flex flex-column p-2">
                     <input required name="title" minlength="4" maxlength="15" type="text" placeholder="Title">
                     <textarea required class="mt-2" minlength="10" placeholder="Content must be at lest 10 characters" name="content" id="" cols="30" rows="10"></textarea>
                     <input class="sub-btn mt-2" type="submit" value="save note">
                 </form>
-                <div id="note-table" class=" p-2 w-50">
+                <div id="note-table" class=" p-2">
                     <table class="table text-center note-tbl">
                         <thead>
                             <th>title</th>
@@ -795,7 +888,8 @@ function runGame(e){
                 </div>
             </div>
         `
-                html += `
+                centerCard.innerHTML = html;
+                spellshtml = `
                 <div class="d-flex flex-column justify-content-center mb-2">
                     <h2 class="text-center">Spells</h2>
                     <form class="mx-auto" onsubmit="getSpellList(event,this)">
@@ -829,7 +923,7 @@ function runGame(e){
                     </form>
                 </div>
                 `
-                centerCard.innerHTML = html;
+                spellList.innerHTML = spellshtml;
             }
         
         list_notes();
@@ -1494,7 +1588,7 @@ function getSpellList(e,element){
     .then(data => {
         console.log(data);
         var html = `
-            <p onclick="defaultCenterCard(this)" class="fa-solid fa-xmark"></p>
+            <p onclick="defaultCenterCard(event,this)" class="fa-solid fa-xmark"></p>
             <div id="spell-section"  class="d-flex flex-column justify-content-center">
                 <table id="spell-table" class="table note-tbl w-75 mx-auto">
                     <thead>
@@ -1517,96 +1611,125 @@ function getSpellList(e,element){
             </table>
         </div>
         `
-        centerCard.innerHTML += html;
+        spellList.innerHTML += html;
     })
 
 }
+function removeSpell(e,element){
+    e.preventDefault();
+    console.log(spells)
+    for(i=0; i<spells.length; i++){
+        // console.log(game_items.players[i].id);
+        if(element._id.value == spells[i]._id){
+            spells.splice(i,1);
+            defaultCenterCard(e);
+        }
+    }
+    console.log(spells);
+    defaultCenterCard(e);
+}
 function getSpellCard(e,element){
     e.preventDefault();
-    var spellSection = document.getElementById('spell-section')
+    
     console.log('Clicked getSpellList()');
     fetch(`https://www.dnd5eapi.co/api/spells/${element.spellIndex.value}`)
     .then(res => res.json())
     .then(data => {
-        console.log(data);
-        var html = `<div id="spell-table" class="mt-3 p-2">
-        <h5>${data.name} | Level ${data.level} | ${data.school.name}</h5>
-        `
-        html +=`
-            <p><strong>Class(es)</strong>: 
-        `
-        for(i=0; i<data.classes.length;i++){
-            if(i == data.classes.length-1){
-                html+= ` 
-                    ${data.classes[i].name} 
+        console.log(spells);
+        var inSpells = false;
+        for(z=0;z<spells.length; z++){
+            if(data._id == spells[z]._id){
+                inSpells = true;
+            }
+        }
+        if(inSpells == false){
+            spells.push(data);
+            console.log('Adding:', data);
+            var html = `<div id="spell-table" class="mt-3 p-2">
+            
+            <form id="" onsubmit="removeSpell(event, this)" class="">
+                <input type="hidden" name="_id" value="${data._id}">
+                <input class="sub-btn " value="X" type="submit">
+            </form>
+            <h5>${data.name} | Level ${data.level} | ${data.school.name}</h5>
+            `
+            html +=`
+                <p><strong>Class(es)</strong>: 
+            `
+            for(n=0; n<data.classes.length;n++){
+                if(n == data.classes.length-1){
+                    html+= ` 
+                        ${data.classes[n].name} 
+                        `
+                }
+                
+                else{
+                    html+= ` 
+                    ${data.classes[n].name}, 
+                `
+                }
+            }
+            html +=`
+            </p>
+            `
+            html +=`
+            <p><strong>${data.casting_time} | ${data.range} | ${data.duration}</strong></p>
+            `
+            if(data.damage){
+                html +=`
+                    <p><strong>Damage</strong>: ${data.damage.damage_type.name}</p>
                     `
             }
             
-            else{
-                html+= ` 
-                ${data.classes[i].name}, 
-            `
-            }
-        }
-        html +=`
-        </p>
-        `
-        html +=`
-        <p><strong>${data.casting_time} | ${data.range} | ${data.duration}</strong></p>
-        `
-        if(data.damage){
-            html +=`
-                <p><strong>Damage</strong>: ${data.damage.damage_type.name}</p>
-                `
-        }
-        
-        if(data.area_of_effect){
-            html += `
-            <p><strong>Area of Effect</strong></p>
-            `
-            for(var [key,value] of Object.entries(data.area_of_effect)){
+            if(data.area_of_effect){
                 html += `
-                <p>${key}: ${value}</p>
+                <p><strong>Area of Effect</strong></p>
+                `
+                for(var [key,value] of Object.entries(data.area_of_effect)){
+                    html += `
+                    <p>${key}: ${value}</p>
+                    `
+                }
+            }
+            html += `
+            <p>|
+            `
+            for(n=0;n<data.components.length;n++){
+                console.log(data.components[n]);
+                html +=`
+                ${data.components[n]} |
                 `
             }
-        }
-        html += `
-        <p>|
-        `
-        for(i=0;i<data.components.length;i++){
-            html +=`
-            ${data.components[i]} |
+            html += `
+            </p>
+            `
+            if(data.concintration == true){
+                html +=`
+                    <p><strong>Concentration</strong>: Required.</p>
+                    `
+            }
+            if(data.ritual == true){
+                html += `
+                <p><strong>Ritual</strong>: Required.</p>
+                `
+            }
+            if(data.material != undefined){
+                html += `
+                    <p><strong>Material(s)</strong>: ${data.material}</p>
+                    `
+            }
+            
+            for(n=0;n<data.desc.length;n++){
+                html += ` <p>${data.desc[n]} </p>`
+            }
+            html += `
+            </div>
             `
         }
-        html += `
-        </p>
-        `
-        if(data.concintration == true){
-            html +=`
-                <p><strong>Concentration</strong>: Required.</p>
-                `
-        }
-        if(data.ritual == true){
-            html += `
-            <p><strong>Ritual</strong>: Required.</p>
-            `
-        }
-        if(data.material != undefined){
-            html += `
-                <p><strong>Material(s)</strong>: ${data.material}</p>
-                `
-        }
+        spellCards.innerHTML += html;
         
-        for(i=0;i<data.desc.length;i++){
-            html += ` <p>${data.desc[i]} </p>`
-        }
-
-
-
-        html += `
-        </div>
-        `
-        spellSection.innerHTML += html;
+            
     })
     }
 window.onload = runGame();
+
