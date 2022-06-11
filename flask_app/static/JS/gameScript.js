@@ -1304,9 +1304,15 @@ function inGameMonsterCard(e,element){
         var dexMod = modifiers(data.dexterity);
         var charMod = modifiers(data.charisma);
         var wisMod = modifiers(data.wisdom);
-
+        var monstInGame = false;
+        for(z=0;z<game_items.monsters.length; z++){
+            if(data.index == game_items.monsters[z].index){
+                monstInGame = true;
+            }
+        }
         // Monster Action Cards___________________________________________________________________
         function actionCards(data){
+            
             actions.innerHTML +=`
             <h5 class="border-bottom border-dark border-2"><strong>Actions</strong></h5>
             `
@@ -1351,7 +1357,17 @@ function inGameMonsterCard(e,element){
             <p><strong>alignment:</strong> ${data.alignment}</p>
             <p><strong>Race:</strong> ${data.type}</p>
             <p><strong>Size:</strong> ${data.size}</p>
-        </div>
+        </div>`
+        
+        if(monstInGame == false){
+            html += `
+            <form id="" onsubmit="addMonsterToGame(event,this)" class="d-flex justify-content-start">
+                <input type="hidden" name="monster_idx" value="${data.index}">
+                <input class="sub-btn " value="add to game" type="submit">
+            </form>
+            </div>`
+        }
+        html+=`
         <table class="mx-auto table w-75 text-center">
             <thead>
                 <th>Challenge</th>
