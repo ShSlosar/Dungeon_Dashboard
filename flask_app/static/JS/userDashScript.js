@@ -9,6 +9,7 @@ var dashBbtn = document.getElementById('dashboards-btn');
 var selectedCardBtn = document.getElementById('main-card-btn');
 var deselectedCardBtn = document.getElementById('un-main-card-btn');
 var deleteAccountBtn = document.getElementById('delete-account');
+var ajaxUrl = 'http://127.0.0.1:5000'
 
 // Display create new dashboard form_
 function newDash(){
@@ -187,7 +188,7 @@ function removeDashFromItems(e,element){
 //AJAX: User dashborad load =>
 function runUserDash(){
     console.log('Loading user Dashboard...');
-    fetch(`http://127.0.0.1:5000/user/dash`)
+    fetch(`${ajaxUrl}/user/dash`)
     .then(res => res.json())
     .then(data =>{
         console.log(data)
@@ -263,7 +264,7 @@ function updateUser(e){
     var editForm =document.getElementById(`user-update-form`)
     var form = new FormData(editForm);
     console.log('Clicked: updateUser()', editForm);
-    fetch('http://127.0.0.1:5000/user/update', {method:'Post', body: form})
+    fetch(`${ajaxUrl}/user/update`, {method:'Post', body: form})
     .then(res => res.json())
     .then(data =>{
         console.log(data);
@@ -280,7 +281,7 @@ function delAcc(e){
     var delForm =document.getElementById(`del-form`)
     var form = new FormData(delForm);
     console.log('Clicked: updateUser()', delForm);
-    fetch('http://127.0.0.1:5000/user/delete', {method:'Post', body: form})
+    fetch(`${ajaxUrl}/user/delete`, {method:'Post', body: form})
 }
 //=========================================
 
@@ -288,7 +289,7 @@ function delAcc(e){
 function deleteDash(e,id){
     e.preventDefault();
     console.log(id);
-    fetch(`http://127.0.0.1:5000/delete/dashboard/${id}`)
+    fetch(`${ajaxUrl}/delete/dashboard/${id}`)
     .then(res => res.json())
     .then(data =>{
         console.log(data)

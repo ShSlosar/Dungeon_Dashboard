@@ -15,6 +15,7 @@ var clockCard = document.getElementById('clock-card');
 var noteTable = document.getElementById('note-table-body');
 var initiativeCard = document.getElementById('ini-cont');
 var clearIniBtn = document.getElementById('ini-btn');
+const ajaxUrl = 'http://127.0.0.1:5000'
 //----------------------------------------------------------------
 
 // Skill-to-Modifier Function_____________________________________________________
@@ -718,10 +719,7 @@ function displayMonsters(e){
     monsters.innerHTML = `<p><strong>There are ${game_items.monsters.length} monsters in this game</strong></p>`
     for(var i=0; i<game_items.monsters.length; i++){
         monsters.innerHTML+=
-        `<form  onsubmit="removeMonsterFromItems(event, this)" class="mt-0 p-1">
-            <input type="hidden" name="monster_idx" value="${game_items.monsters[i].indx}">
-            <input id="rem-btn" class="sub-btn h-25 " value="X" type="submit">
-        </form>
+        `
         <div class="monst-crd d-flex justify-content-center border-bottom border-light p-2 mt-2">
             <div class="d-flex flex-column">
                 <h4 class="text-center"><strong>${game_items.monsters[i].name}</strong></h4>
@@ -826,7 +824,7 @@ function defaultClockCard(e){
 function runGame(e){
     console.log('Starting game...');
     //e.preventDefault();
-    fetch('http://127.0.0.1:5000/game/run')
+    fetch(`${ajaxUrl}/game/run`)
         .then(res => res.json() )                                          //res short for response
         
         .then (data =>
@@ -995,10 +993,6 @@ function runGame(e){
                 console.log(data.monsters[i].id)
                 monsters.innerHTML+=
                 `
-                <form  onsubmit="removeMonsterFromItems(event, this)" class="mt-0  p-1">
-                    <input type="hidden" name="monster_idx" value="${data.monsters[i].index}">
-                    <input id="rem-btn" class="sub-btn h-25 " value="X" type="submit">
-                </form>
                 <div class="monst-crd d-flex justify-content-center border-bottom border-light p-2 mt-2">
                         <div class="d-flex flex-column">
                             <h4 class="text-center"><strong>${data.monsters[i].name}</strong></h4>
@@ -1066,7 +1060,7 @@ function saveClock(e,element){
     var clockForm =document.getElementById(`save-clock-form`)
     var form = new FormData(clockForm);
     console.log('Clicked: saveClock()', form);
-    fetch('http://127.0.0.1:5000/update/clock', {method:'Post', body: form})
+    fetch(`${ajaxUrl}/update/clock`, {method:'Post', body: form})
     .then(res => res.json())
     .then(data =>{
         console.log(data);
@@ -1083,7 +1077,7 @@ function saveNote(e){
     var noteForm =document.getElementById(`note-form`)
     var form = new FormData(noteForm);
     console.log('Clicked: saveNote()', noteForm);
-    fetch('http://127.0.0.1:5000/save/note', {method:'Post', body: form})
+    fetch(`${ajaxUrl}/save/note`, {method:'Post', body: form})
     .then(res => res.json())
     .then(data =>{
         console.log(data);
@@ -1098,7 +1092,7 @@ function updateNote(e){
     var noteForm =document.getElementById(`update-note-form`)
     var form = new FormData(noteForm);
     console.log('Clicked: saveNote()', noteForm);
-    fetch('http://127.0.0.1:5000/update/note', {method:'Post', body: form})
+    fetch(`${ajaxUrl}/update/note`, {method:'Post', body: form})
     .then(res => res.json())
     .then(data =>{
         console.log(data);
@@ -1111,7 +1105,7 @@ function updateNote(e){
 function deleteNote(e,data){
     e.preventDefault();
     console.log('Clicked: deleteNote()', data);
-    fetch(`http://127.0.0.1:5000/delete/note/${data}`)
+    fetch(`${ajaxUrl}/delete/note/${data}`)
     .then(res => res.json())
     .then(data =>{
         console.log(data)
@@ -1125,7 +1119,7 @@ function addMonster(e){
     var addForm =document.getElementById(`add-monster-form`)
     var form = new FormData(addForm);
     console.log('Clicked: addMonster()', addForm);
-    fetch('http://127.0.0.1:5000/save/monster', {method:'Post', body: form})
+    fetch(`${ajaxUrl}/save/monster`, {method:'Post', body: form})
     .then(res => res.json())
     .then(data =>{
         console.log(data);
@@ -1140,7 +1134,7 @@ function removeMonster(e,data){
     // var removeForm =document.getElementById(`remove-monster-form`)
     // var form = new FormData(removeForm);
     console.log('Clicked: removeMonster()');
-    fetch(`http://127.0.0.1:5000/delete/monster/${data}`)
+    fetch(`${ajaxUrl}/delete/monster/${data}`)
     .then(res => res.json())
     .then(data =>{
         console.log(data)
@@ -1169,7 +1163,7 @@ function addPlayer(e){
     var addForm =document.getElementById(`add-player-form`)
     var form = new FormData(addForm);
     console.log('Clicked: addPlayer()', addForm);
-    fetch('http://127.0.0.1:5000/save/player', {method:'Post', body: form})
+    fetch(`${ajaxUrl}/save/player`, {method:'Post', body: form})
     .then(res => res.json())
     .then(data =>{
         console.log(data);
@@ -1183,7 +1177,7 @@ function addPlayer(e){
 function removePlayer(e,data){
     e.preventDefault();
     console.log('Clicked: deletePlayer()', data);
-    fetch(`http://127.0.0.1:5000/delete/player/${data}`)
+    fetch(`${ajaxUrl}/delete/player/${data}`)
     .then(res => res.json())
     .then(data =>{
         console.log(data)
@@ -1197,7 +1191,7 @@ function displayPlayerCard(e){
     var playerForm =document.getElementById(`get-player-form`)
     var form = new FormData(playerForm);
     console.log('Clicked: displayPlayerCard()', playerForm)
-    fetch('http://127.0.0.1:5000/get/player', {method:'post', body:form})
+    fetch(`${ajaxUrl}/get/player`, {method:'post', body:form})
         .then(res => res.json() )                                          //res short for response
         .then (data =>{
             console.log(data)
@@ -1276,7 +1270,7 @@ function updatePlayer(e){
     var editForm =document.getElementById(`edit-player-form`)
     var form = new FormData(editForm);
     console.log('Clicked: updatePlayer()', editForm);
-    fetch('http://127.0.0.1:5000/update/player', {method:'Post', body: form})
+    fetch(`${ajaxUrl}/update/player`, {method:'Post', body: form})
     .then(res => res.json())
     .then(data =>{
         console.log(data);
@@ -1362,7 +1356,7 @@ function inGameMonsterCard(e,element){
         if(monstInGame == false){
             html += `
             <form id="" onsubmit="addMonsterToGame(event,this)" class="d-flex justify-content-start">
-                <input type="hidden" name="monster_idx" value="${data.index}">
+                <input type="hidden" name="monster_indx" value="${data.index}">
                 <input class="sub-btn " value="add to game" type="submit">
             </form>
             </div>`
@@ -1560,7 +1554,7 @@ function monsterSearch2(e){
     var rating = document.getElementById('rating').value;
     var form = new FormData(searchForm);
     console.log('monster Challenge Rating Search =>', rating);
-    fetch('http://127.0.0.1:5000/search/monsters/ch', {method:'Post', body: form})
+    fetch(`${ajaxUrl}/search/monsters/ch`, {method:'Post', body: form})
     .then(res => res.json())
     .then(data =>{
         console.log(data);
