@@ -15,7 +15,7 @@ var clockCard = document.getElementById('clock-card');
 var noteTable = document.getElementById('note-table-body');
 var initiativeCard = document.getElementById('ini-cont');
 var clearIniBtn = document.getElementById('ini-btn');
-const ajaxUrl = 'http://127.0.0.1:5000'
+const ajaxUrl = 'http://127.0.0.1:5000/'
 //----------------------------------------------------------------
 
 // Skill-to-Modifier Function_____________________________________________________
@@ -824,7 +824,7 @@ function defaultClockCard(e){
 function runGame(e){
     console.log('Starting game...');
     //e.preventDefault();
-    fetch(`${ajaxUrl}/game/run`)
+    fetch(`http://127.0.0.1:5000/game/run`)
         .then(res => res.json() )                                          //res short for response
         
         .then (data =>
